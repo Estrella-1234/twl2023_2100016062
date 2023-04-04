@@ -1,6 +1,6 @@
 <template >
     <div class="p-4">
-        <p>You Didi it</p>
+        <p>User Page</p>
     </div>
 </template>
 <script>

@@ -1,6 +1,6 @@
 <template>
     <div class="p-4">
-        <p>Customer Page</p>
+        <p>Setting Page</p>
     </div>
 </template>
 
@@ -9,7 +9,6 @@ export default {
     
 }
 </script>
-
 <style >
     
 </style>

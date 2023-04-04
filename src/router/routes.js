@@ -23,12 +23,17 @@ export default [
             {
                 name:'customer',
                 path: '/customer',
-                component: () => import('../pages/user'),
+                component: () => import('../pages/customer'),
             },
             {
                 name:'contact',
                 path: '/contact',
                 component: () => import('../pages/contact'),
+            },
+            {
+                name:'setting',
+                path: '/setting',
+                component: () => import('../pages/setting'),
             },
         ]
     },
