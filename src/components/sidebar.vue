@@ -34,7 +34,7 @@
       </div>
       <div class="menu-man text-left px-2 justify-self-end whitespace-nowrap">
         <div class="py-3 rounded-md cursor-pointer text-gray-300 hover:text-white">
-          <a href="https://vuejs.org/" target="_blank" class="px-2 flex space-x-2"><span class="pi pi-question" v-tooltip.right="'About Me'"></span> <span v-show="dataOpenSideBar">About Me</span></a>
+          <a href="https://vuejs.org/" target="_blank" class="px-2 flex space-x-2"><span class="pi pi-question-circle" v-tooltip.right="'About Me'"></span> <span v-show="dataOpenSideBar">About Me</span></a>
         </div>
       </div>
     </div>
