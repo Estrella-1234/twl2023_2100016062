@@ -14,7 +14,7 @@
           </div>
         </div>
         <div class="   py-3 rounded-sm cursor-pointer text-gray-300 hover:text-white">
-          <router-link to="/" class="px-2 flex space-x-2"><span class="pi pi-microsoft" v-tooltip.right="'Dashboard'"></span> <span v-show="dataOpenSideBar">Dashboard</span></router-link>
+          <router-link to="/" class="px-2 flex space-x-2"><span class="pi pi-prime" v-tooltip.right="'Dashboard'"></span> <span v-show="dataOpenSideBar">Dashboard</span></router-link>
         </div>
         <div class="   py-3 rounded-md cursor-pointer  text-gray-300 hover:text-white">
           <router-link to="/user" class="px-2 flex space-x-2"><span class="pi pi-user " v-tooltip.right="'User'"></span> <span v-show="dataOpenSideBar">User</span></router-link>
