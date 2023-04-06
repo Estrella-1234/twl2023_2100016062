@@ -11,14 +11,14 @@ import Avatar from 'primevue/avatar';
 import Menu from 'primevue/menu';
 import Tooltip from 'primevue/tooltip';
 
-import store from './store';
+
 const app = createApp(App);
 app.component('InputText', InputText);
 app.component('Avatar', Avatar);
 app.component('Menu',Menu);
 app.directive('tooltip', Tooltip);
 
-app.use(store);
+
 app.use(router);
 app.use(PrimeVue);
  app.mount('#app')
