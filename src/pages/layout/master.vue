@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full h-full flex">
+  <div class="w-full h-full flex overflow-auto">
     <sidebar :dataOpenSideBar="openSidebar" />
     <div class="w-full h-full">
       <headerTop :dataOpenSideBar="openSidebar" :clickHambuger="toggleSidebar" />

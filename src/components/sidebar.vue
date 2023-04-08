@@ -4,7 +4,7 @@
       <div class="text-xl font-bold text-center flex items-center justify-center text-white h-full" v-show="dataOpenSideBar">APP</div>
       <img src="../assets/Avatar.jpg" v-show="!dataOpenSideBar" class="p-1 w-8 h-8 rounded-full ring-2 ring-gray-100 dark:ring-gray-500 " alt="Avatar" />
     </div>
-    <div class="flex flex-col justify-between h-[calc(100vh-3rem)] bg-gray-900">
+    <div class="flex flex-col justify-between h-[calc(100vh-3rem)] bg-gray-900 overflow-auto">
       <div class="menu-man text-left px-2 whitespace-nowrap ">
         <div class="profile flex justify-center items-center text-center p-5 ">
           <div class="text-center  text-white" v-show="dataOpenSideBar">

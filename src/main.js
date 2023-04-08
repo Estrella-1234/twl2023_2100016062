@@ -10,6 +10,9 @@ import InputText from 'primevue/inputtext';
 import Avatar from 'primevue/avatar';
 import Menu from 'primevue/menu';
 import Tooltip from 'primevue/tooltip';
+import Button from 'primevue/button';
+import Dialog from 'primevue/dialog';
+import Textarea from 'primevue/textarea';
 
 
 const app = createApp(App);
@@ -17,6 +20,9 @@ app.component('InputText', InputText);
 app.component('Avatar', Avatar);
 app.component('Menu',Menu);
 app.directive('tooltip', Tooltip);
+app.directive('Button', Button);
+app.directive('Dialog', Dialog);
+app.directive('Textarea', Textarea);
 
 
 app.use(router);
