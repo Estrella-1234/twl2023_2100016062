@@ -1,6 +1,6 @@
 <template>
     <div class="p-4">
-        <p>Contact Page</p>
+        <p>Contacts</p>
     </div>
 </template>
 

@@ -1,0 +1,39 @@
+{
+  "mahasiswa": [
+    {
+      "id": 1,
+      "nama": "Gemilang Tirto Ismoyo Santoso",
+      "nim": 2100016062,
+      "alamat": "Jaranan, Panggungharjo, Kec. Sewon, Kabupaten Bantul",
+      "email": "gemilang2100016062@webmail.uad.ac.id"
+    },
+    {
+      "id": 2,
+      "nama": "Wahyu Yudha Saputra",
+      "nim": 2100016044,
+      "alamat": "Bakung, Bangunharjo, Sewon, Bantul Regency",
+      "email": "Wahyu2100016044@webmail.uad.ac.id"
+    },
+    {
+      "id": 3,
+      "nama": "M Ali Mahsun",
+      "nim": 2100016045,
+      "alamat": "Bakung, Bangunharjo, Sewon, Bantul Regency",
+      "email": "m2100016045@webmail.uad.ac.id"
+    },
+    {
+      "id": 4,
+      "nama": "Aditya Yoga Kurniawan",
+      "nim": 2100016069,
+      "alamat": "Gg. Lele, Sokowaten, Tamanan, Kec. Banguntapan, Kabupaten Bantul",
+      "email": "Aditya2100016069@webmail.uad.ac.id"
+    },
+    {
+      "nama": "test",
+      "nim": 21,
+      "alamat": "test",
+      "email": "test@gmail.com",
+      "id": 5
+    }
+  ]
+}

@@ -3,7 +3,8 @@
         <Button label="Show" class="text-center" icon="pi pi-external-link" @click="visible = true" />
         <Dialog v-model:visible="visible" modal header="Form Data Mahasiswa" :style="{ width: '50vw' }">
         <div class="p-4 bg-white rounded-lg shadow-md">
-            <form>
+
+            <form @submit.prevent="submitForm">
                 <div class="mb-4">
                     <label for="nama" class="block font-semibold mb-2">Nama:</label>
                     <InputText id="nama" v-model="nama" class="w-full" />
@@ -35,7 +36,7 @@
         </Dialog>
     </div>
 </template>
-  
+
 <script>
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
