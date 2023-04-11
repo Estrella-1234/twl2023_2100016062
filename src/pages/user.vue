@@ -44,25 +44,66 @@
     <div class="pl-8">
         <table class="border border-collapse border-black table-fixed">
             <thead>
-                <tr>
+                <tr class="bg-slate-600 text-white m-5">
                     <th class="border border-black w-28">NIM</th>
                     <th class="border border-black w-44">Nama</th>
                     <th class="border border-black w-80">Alamat</th>
-                    <th class="border border-black w-48">E-Mail</th>
-                    <th class="border border-black w-36">Tools</th>
+                    <th class="border border-black w-52">E-Mail</th>
+                    <th class="border border-black w-32">Edit</th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="post in posts" :key="post.nim">
-                    <td class="border border-black text-left">{{ post.nim }}</td>
+                <tr v-for="post in posts" :key="post.id">
+                    <td class="border border-black text-left">{{ post.nim }} </td>
                     <td class="border border-black text-left">{{ post.nama }}</td>
                     <td class="border border-black text-left">{{ post.alamat }}</td>
                     <td class="border border-black text-left">{{ post.email }}</td>
                     <td class="border border-black ">
-                        <Button class="mr-10" icon="pi pi-pencil" severity="success" text raised aria-label="Edit" />
-                        <Button icon="pi pi-trash" severity="danger" text raised  aria-label="Delete" />
-                        
-                        
+
+                        <!-- Edit Data -->
+                        <Button class="mr-10" icon="pi pi-user-edit" severity="success" text raised aria-label="Edit"
+                            @click="editPost(post)" />
+                        <Dialog v-model:visible="visible1" modal header="Edit Data Mahasiswa" :style="{ width: '50vw' }">
+                            <div>
+                                <form @submit.prevent="updatePost()">
+                                    <div class="mb-4">
+                                        <label for="nama" class="block font-semibold mb-2">Nama: </label>
+                                        <InputText id="nama" v-model="selectedPost.nama" class="w-full" />
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="nim" class="block font-semibold mb-2">NIM:</label>
+                                        <InputNumber v-model="selectedPost.nim" inputId="withoutgrouping"
+                                            :useGrouping="false" class="w-full" id="nim" />
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="alamat" class="block font-semibold mb-2">Alamat:</label>
+                                        <InputText id="alamat" v-model="selectedPost.alamat" class="w-full" />
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="email" class="block font-semibold mb-2">Email:</label>
+                                        <InputText id="email" v-model="selectedPost.email" class="w-full" />
+                                    </div>
+                                    <div class="text-center">
+                                        <Button label="Update" type="submit" @click="test()"
+                                            class="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 rounded" />
+                                    </div>
+                                </form>
+                            </div>
+                        </Dialog>
+
+                        <!-- Delete Data -->
+                        <Button icon="pi pi-trash" severity="danger" text raised aria-label="Delete"
+                            @click="confirm2(post), test()" />
+                        <Dialog v-model:visible="visible2" modal header="Hapus Data" :style="{ width: '400px' }">
+                            <p>Are you sure you want to delete this data?</p>
+                            <div class="flex justify-end space-x-4 pt-6 ">
+                                <Button label="Cancel" class="p-button-text" @click="visible2 = false" />
+                                <Button label="Delete" class="p-button-danger" @click="deletePost" />
+                            </div>
+
+                        </Dialog>
+
+
                     </td>
                 </tr>
             </tbody>
@@ -99,6 +140,8 @@ import InputNumber from 'primevue/inputnumber';
 
 
 
+
+
 export default {
     name: 'App',
 
@@ -120,41 +163,60 @@ export default {
         Dialog,
         InputNumber,
     },
+
+
     setup() {
         const visible = ref(false);
+        const visible1 = ref(false);
+
+
+
 
         return {
             visible,
+            visible1,
         };
     },
 
     data() {
         return {
+            visible2: false,
             posts: [],
             showForm: false,
+            id: '',
             nama: '',
-            nim: '',
+            nim: 0,
             alamat: '',
             email: '',
-            newPost: { nama: '', nim: '', alamat: '', email: '' },
+            newPost: {
+                nama: "",
+                nim: 0,
+                alamat: "",
+                email: "",
+            },
+            selectedPost: null,
         }
     },
 
     methods: {
+        test() {
+            console.log("Test")
+        },
+
+
 
         submitForm() {
             // Check if all fields are filled
-            if (this.newPost.nama === '' || this.newPost.nim === '' || this.newPost.alamat === '' || this.newPost.email === '') {
-                alert('Please fill all fields');
+            if (this.newPost.nama === '' || this.newPost.nim === 0 || this.newPost.alamat === '' || this.newPost.email === '') {
+                alert('Data tdak boleh kosong');
                 return;
             }
 
             // Check if email is valid
             if (!this.validateEmail(this.newPost.email)) {
-                alert('Email is not valid');
+                alert('Email tidak valid');
                 return;
             }
-
 
 
             // Send a POST request to add the new post to the server
@@ -178,10 +240,55 @@ export default {
             // Regular expression to validate email format
             const re = /\S+@\S+\.\S+/;
             return re.test(email);
-        }
+        },
+
+
+        editPost(post) {
+            this.visible1 = true;
+            this.selectedPost = { ...post };
+        },
+
+        updatePost() {
+            axios.put(`http://localhost:3000/mahasiswa/${this.selectedPost.id}`, this.selectedPost)
+                .then(response => {
+                    const updatedPost = response.data;
+                    const index = this.posts.findIndex(post => post.id === updatedPost.id);
+
+                    this.posts.splice(index, 1, updatedPost);
+                    this.visible1 = false;
+
+                })
+
+        },
+
+        deletePost(post) {
+            const index = this.posts.indexOf(post);
+            this.posts.splice(index, 1);
+            this.deleteConfirmed()
+            this.visible2 = false;
+        },
+
+        confirm2(post) {
+            this.visible2 = true;
+            this.selectedPost = post;
+
+        },
+
+        deleteConfirmed() {
+            axios.delete(`http://localhost:3000/mahasiswa/${this.selectedPost.id}`, this.selectedPost)
+                .then(() => {
+                    console.log('Post deleted successfully!');
+                    this.$toast.success('Pesanan berhasil diproses')
+                })
+        },
+
+
+
+
 
 
     },
+
 
 
 };

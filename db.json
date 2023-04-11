@@ -29,10 +29,36 @@
       "email": "Aditya2100016069@webmail.uad.ac.id"
     },
     {
-      "nama": "test",
-      "nim": 21,
-      "alamat": "test",
-      "email": "test@gmail.com",
+      "nama": "Gemilang Tirto",
+      "nim": 2100016062,
+      "alamat": "Banyuwangi",
+      "email": "gemilangtirto2002@gmail.com",
+      "id": 5
+    }
+  ],
+  "products": [
+    {
+      "id": 1,
+      "name": "Product 1",
+      "description": "Description 1",
+      "price": 10
+    },
+    {
+      "name": "",
+      "description": "",
+      "price": 0,
+      "id": 2
+    },
+    {
+      "name": "",
+      "description": "",
+      "price": 0,
+      "id": 3
+    },
+    {
+      "name": "",
+      "description": "",
+      "price": 0,
       "id": 5
     }
   ]
