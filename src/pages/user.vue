@@ -42,23 +42,24 @@
     </div>
 
     <!-- Read Data -->
-    <div class="pl-8">
+    <div class="pl-8 pr-8">
+        <div class="overflow-x-auto">
         <table class="border border-collapse border-black table-auto">
             <thead>
                 <tr class="bg-slate-600 text-white m-5">
-                    <th class="border border-black w-28">NIM</th>
-                    <th class="border border-black w-44">Nama</th>
-                    <th class="border border-black w-80">Alamat</th>
-                    <th class="border border-black w-52">E-Mail</th>
-                    <th class="border border-black w-32">Edit</th>
+                    <th class="border border-black w-1/8">NIM</th>
+                    <th class="border border-black w-1/4">Nama</th>
+                    <th class="border border-black w-1/2">Alamat</th>
+                    <th class="border border-black w-1/2">E-Mail</th>
+                    <th class="border border-black w-1/2">Edit</th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="post in posts" :key="post.id">
-                    <td class="border border-black text-center">{{ post.nim }} </td>
-                    <td class="border border-black text-left">{{ post.nama }}</td>
-                    <td class="border border-black text-left">{{ post.alamat }}</td>
-                    <td class="border border-black text-left">{{ post.email }}</td>
+                    <td class="border border-black py-2 px-2 text-center">{{ post.nim }} </td>
+                    <td class="border border-black py-2 px-2 text-left">{{ post.nama }}</td>
+                    <td class="border border-black py-2 px-2 text-left">{{ post.alamat }}</td>
+                    <td class="border border-black py-2 px-2 text-left">{{ post.email }}</td>
                     <td class="border border-black ">
 
                         <!-- Edit Data -->
@@ -108,8 +109,9 @@
                     </td>
                 </tr>
             </tbody>
+            
         </table>
-
+        </div>
 
     </div>
 </template>
