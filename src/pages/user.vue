@@ -1,7 +1,7 @@
 <template>
     <div>
         <Toast />
-        <h3 class="font-serif font-semibold text-2xl pt-4">Data Mahasiswa</h3>
+        <h3 class="font-serif font-semibold text-3xl pt-4">Data Mahasiswa</h3>
 
         <!-- Pop Up Form Input-->
         <div class="justify-content-center text-left pl-8 pb-7">
@@ -32,7 +32,7 @@
 
                         </div>
                         <div class="text-center">
-                            <Button label="Submit" type="submit" 
+                            <Button label="Submit" type="submit"
                                 class="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 rounded" />
                         </div>
                     </form>
@@ -44,73 +44,75 @@
     <!-- Read Data -->
     <div class="pl-8 pr-8">
         <div class="overflow-x-auto">
-        <table class="border border-collapse border-black table-auto">
-            <thead>
-                <tr class="bg-slate-600 text-white m-5">
-                    <th class="border border-black w-1/8">NIM</th>
-                    <th class="border border-black w-1/4">Nama</th>
-                    <th class="border border-black w-1/2">Alamat</th>
-                    <th class="border border-black w-1/2">E-Mail</th>
-                    <th class="border border-black w-1/2">Edit</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="post in posts" :key="post.id">
-                    <td class="border border-black py-2 px-2 text-center">{{ post.nim }} </td>
-                    <td class="border border-black py-2 px-2 text-left">{{ post.nama }}</td>
-                    <td class="border border-black py-2 px-2 text-left">{{ post.alamat }}</td>
-                    <td class="border border-black py-2 px-2 text-left">{{ post.email }}</td>
-                    <td class="border border-black ">
+            <table class="border border-collapse border-black table-auto">
+                <thead>
+                    <tr class="bg-slate-600 text-white m-5">
+                        <th class="border border-black w-1/8">NIM</th>
+                        <th class="border border-black w-1/2">Nama</th>
+                        <th class="border border-black w-1/2">Alamat</th>
+                        <th class="border border-black w-1/2">E-Mail</th>
+                        <th class="border border-black w-1/8">Edit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="post in posts" :key="post.id">
+                        <td class="border border-black py-2 px-2 text-center">{{ post.nim }} </td>
+                        <td class="border border-black py-2 px-2 text-left">{{ post.nama }}</td>
+                        <td class="border border-black py-2 px-2 text-left text-justify">{{ post.alamat }}</td>
+                        <td class="border border-black py-2 px-2 text-left">{{ post.email }}</td>
+                        <td class="border border-black py-2 px-2">
 
-                        <!-- Edit Data -->
-                        <Button class="mr-10" icon="pi pi-user-edit" severity="success" text raised aria-label="Edit"
-                            @click="editPost(post)" />
-                        <Dialog v-model:visible="visible1" modal header="Edit Data Mahasiswa" :style="{ width: '50vw' }">
-                            <div>
-                                <form @submit.prevent="updatePost()">
-                                    <div class="mb-4">
-                                        <label for="nama" class="block font-semibold mb-2">Nama: </label>
-                                        <InputText id="nama" v-model="selectedPost.nama" class="w-full" />
+                            <!-- Edit Data -->
+                            <div class="flex justify-center space-x-2">
+                                <Button class="mr-10" icon="pi pi-user-edit" severity="success" text raised
+                                    aria-label="Edit" @click="editPost(post)" />
+                                <Dialog v-model:visible="visible1" modal header="Edit Data Mahasiswa"
+                                    :style="{ width: '50vw' }">
+                                    <div>
+                                        <form @submit.prevent="updatePost()">
+                                            <div class="mb-4">
+                                                <label for="nama" class="block font-semibold mb-2">Nama: </label>
+                                                <InputText id="nama" v-model="selectedPost.nama" class="w-full" />
+                                            </div>
+                                            <div class="mb-4">
+                                                <label for="nim" class="block font-semibold mb-2">NIM:</label>
+                                                <InputNumber v-model="selectedPost.nim" inputId="withoutgrouping"
+                                                    :useGrouping="false" class="w-full" id="nim" />
+                                            </div>
+                                            <div class="mb-4">
+                                                <label for="alamat" class="block font-semibold mb-2">Alamat:</label>
+                                                <InputText id="alamat" v-model="selectedPost.alamat" class="w-full" />
+                                            </div>
+                                            <div class="mb-4">
+                                                <label for="email" class="block font-semibold mb-2">Email:</label>
+                                                <InputText id="email" v-model="selectedPost.email" class="w-full" />
+                                            </div>
+                                            <div class="text-center">
+                                                <Button label="Update" type="submit"
+                                                    class="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 rounded" />
+                                            </div>
+                                        </form>
                                     </div>
-                                    <div class="mb-4">
-                                        <label for="nim" class="block font-semibold mb-2">NIM:</label>
-                                        <InputNumber v-model="selectedPost.nim" inputId="withoutgrouping"
-                                            :useGrouping="false" class="w-full" id="nim" />
+                                </Dialog>
+
+                                <!-- Delete Data -->
+                                <Button icon="pi pi-trash" severity="danger" text raised aria-label="Delete"
+                                    @click="confirm2(post), test()" />
+                                <Dialog v-model:visible="visible2" modal header="Hapus Data" :style="{ width: '400px' }">
+                                    <p>Are you sure you want to delete this data?</p>
+                                    <div class="flex justify-end space-x-4 pt-6 ">
+                                        <Button label="Cancel" class="p-button-text" @click="visible2 = false" />
+                                        <Button label="Delete" class="p-button-danger" @click="deletePost" />
                                     </div>
-                                    <div class="mb-4">
-                                        <label for="alamat" class="block font-semibold mb-2">Alamat:</label>
-                                        <InputText id="alamat" v-model="selectedPost.alamat" class="w-full" />
-                                    </div>
-                                    <div class="mb-4">
-                                        <label for="email" class="block font-semibold mb-2">Email:</label>
-                                        <InputText id="email" v-model="selectedPost.email" class="w-full" />
-                                    </div>
-                                    <div class="text-center">
-                                        <Button label="Update" type="submit" 
-                                            class="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 rounded" />
-                                    </div>
-                                </form>
+
+                                </Dialog>
                             </div>
-                        </Dialog>
 
-                        <!-- Delete Data -->
-                        <Button icon="pi pi-trash" severity="danger" text raised aria-label="Delete"
-                            @click="confirm2(post), test()" />
-                        <Dialog v-model:visible="visible2" modal header="Hapus Data" :style="{ width: '400px' }">
-                            <p>Are you sure you want to delete this data?</p>
-                            <div class="flex justify-end space-x-4 pt-6 ">
-                                <Button label="Cancel" class="p-button-text" @click="visible2 = false" />
-                                <Button label="Delete" class="p-button-danger" @click="deletePost" />
-                            </div>
+                        </td>
+                    </tr>
+                </tbody>
 
-                        </Dialog>
-
-
-                    </td>
-                </tr>
-            </tbody>
-            
-        </table>
+            </table>
         </div>
 
     </div>
@@ -185,6 +187,7 @@ export default {
             toast.add({ severity: 'error', summary: 'Delete Message', detail: 'Data Berhasil Dihapus', life: 3000 });
         };
 
+        
 
 
         return {
