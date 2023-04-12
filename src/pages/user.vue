@@ -1,5 +1,6 @@
 <template>
     <div>
+        <Toast />
         <h3 class="font-serif font-semibold text-2xl pt-4">Data Mahasiswa</h3>
 
         <!-- Pop Up Form Input-->
@@ -31,7 +32,7 @@
 
                         </div>
                         <div class="text-center">
-                            <Button label="Submit" type="submit"
+                            <Button label="Submit" type="submit" 
                                 class="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 rounded" />
                         </div>
                     </form>
@@ -42,7 +43,7 @@
 
     <!-- Read Data -->
     <div class="pl-8">
-        <table class="border border-collapse border-black table-fixed">
+        <table class="border border-collapse border-black table-auto">
             <thead>
                 <tr class="bg-slate-600 text-white m-5">
                     <th class="border border-black w-28">NIM</th>
@@ -54,7 +55,7 @@
             </thead>
             <tbody>
                 <tr v-for="post in posts" :key="post.id">
-                    <td class="border border-black text-left">{{ post.nim }} </td>
+                    <td class="border border-black text-center">{{ post.nim }} </td>
                     <td class="border border-black text-left">{{ post.nama }}</td>
                     <td class="border border-black text-left">{{ post.alamat }}</td>
                     <td class="border border-black text-left">{{ post.email }}</td>
@@ -84,7 +85,7 @@
                                         <InputText id="email" v-model="selectedPost.email" class="w-full" />
                                     </div>
                                     <div class="text-center">
-                                        <Button label="Update" type="submit" @click="test()"
+                                        <Button label="Update" type="submit" 
                                             class="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 rounded" />
                                     </div>
                                 </form>
@@ -108,6 +109,8 @@
                 </tr>
             </tbody>
         </table>
+
+
     </div>
 </template>
 
@@ -137,8 +140,7 @@ import Dialog from 'primevue/dialog';
 import { ref } from 'vue';
 import axios from 'axios';
 import InputNumber from 'primevue/inputnumber';
-
-
+import { useToast } from "primevue/usetoast";
 
 
 
@@ -162,6 +164,7 @@ export default {
         Button,
         Dialog,
         InputNumber,
+
     },
 
 
@@ -169,12 +172,25 @@ export default {
         const visible = ref(false);
         const visible1 = ref(false);
 
+        const toast = useToast();
+        const success = () => {
+            toast.add({ severity: 'success', summary: 'Success Message', detail: 'Data Berhasil Disimpan', life: 3000 });
+        };
+        const change = () => {
+            toast.add({ severity: 'success', summary: 'Success Message', detail: 'Data Berhasil Diubah', life: 3000 });
+        };
+        const del = () => {
+            toast.add({ severity: 'error', summary: 'Delete Message', detail: 'Data Berhasil Dihapus', life: 3000 });
+        };
 
 
 
         return {
             visible,
             visible1,
+            success,
+            change,
+            del,
         };
     },
 
@@ -228,6 +244,7 @@ export default {
                     this.nim = '';
                     this.alamat = '';
                     this.email = '';
+                    this.success();
                     // Close the dialog
                     this.visible = false;
                 })
@@ -256,6 +273,7 @@ export default {
 
                     this.posts.splice(index, 1, updatedPost);
                     this.visible1 = false;
+                    this.change();
 
                 })
 
@@ -278,7 +296,7 @@ export default {
             axios.delete(`http://localhost:3000/mahasiswa/${this.selectedPost.id}`, this.selectedPost)
                 .then(() => {
                     console.log('Post deleted successfully!');
-                    this.$toast.success('Pesanan berhasil diproses')
+                    this.del()
                 })
         },
 
