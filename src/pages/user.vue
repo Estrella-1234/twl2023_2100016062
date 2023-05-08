@@ -46,7 +46,7 @@
         <div class="overflow-x-auto">
             <table class="border border-collapse border-black table-auto">
                 <thead>
-                    <tr class="bg-slate-600 text-white m-5">
+                    <tr class="bg-slate-600 text-white m-5 mt-2 mb-2">
                         <th class="border border-black w-1/8">NIM</th>
                         <th class="border border-black w-1/2">Nama</th>
                         <th class="border border-black w-1/2">Alamat</th>
@@ -58,7 +58,7 @@
                     <tr v-for="post in posts" :key="post.id">
                         <td class="border border-black py-2 px-2 text-center">{{ post.nim }} </td>
                         <td class="border border-black py-2 px-2 text-left">{{ post.nama }}</td>
-                        <td class="border border-black py-2 px-2 text-left text-justify">{{ post.alamat }}</td>
+                        <td class="border border-black py-2 px-2 text-left">{{ post.alamat }}</td>
                         <td class="border border-black py-2 px-2 text-left">{{ post.email }}</td>
                         <td class="border border-black py-2 px-2">
 
@@ -244,6 +244,7 @@ export default {
             axios.post('http://localhost:3000/mahasiswa', this.newPost)
                 .then(response => {
                     this.posts.push(response.data);
+                    console.log(response.data);
                     // Clear the form fields
                     this.nama = '';
                     this.nim = '';

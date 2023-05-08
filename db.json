@@ -20,32 +20,13 @@
       "nim": 2100016045,
       "alamat": "Bakung, Bangunharjo, Sewon, Bantul Regency",
       "email": "m2100016045@webmail.uad.ac.id"
-    }
-  ],
-  "products": [
-    {
-      "id": 1,
-      "name": "Product 1",
-      "description": "Description 1",
-      "price": 10
     },
     {
-      "name": "",
-      "description": "",
-      "price": 0,
-      "id": 2
-    },
-    {
-      "name": "",
-      "description": "",
-      "price": 0,
-      "id": 3
-    },
-    {
-      "name": "",
-      "description": "",
-      "price": 0,
-      "id": 5
+      "nama": "123213",
+      "nim": 123213,
+      "alamat": "123123",
+      "email": "123123@gmail.com",
+      "id": 4
     }
   ]
 }
