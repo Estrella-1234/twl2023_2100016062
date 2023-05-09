@@ -55,7 +55,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="post in posts" :key="post.id">
+                    <tr v-for="post in posts" :key="post.nim">
                         <td class="border border-black py-2 px-2 text-center">{{ post.nim }} </td>
                         <td class="border border-black py-2 px-2 text-left">{{ post.nama }}</td>
                         <td class="border border-black py-2 px-2 text-left">{{ post.alamat }}</td>
@@ -152,14 +152,7 @@ export default {
     name: 'App',
 
     mounted() {
-        axios.get('http://localhost:3000/mahasiswa')
-            .then(response => {
-
-                this.posts = response.data;
-            })
-            .catch(error => {
-                console.log(error);
-            })
+        this.fetchPosts();
     },
 
 
@@ -199,6 +192,7 @@ export default {
         };
     },
 
+
     data() {
         return {
             visible2: false,
@@ -220,9 +214,16 @@ export default {
     },
 
     methods: {
-        test() {
-            console.log("Test")
-        },
+
+        fetchPosts() {
+        axios.get('http://localhost:3001/api/products')
+            .then(response => {
+                this.posts = response.data;
+            })
+            .catch(error => {
+                console.log(error);
+            })
+    },
 
 
 
@@ -241,7 +242,7 @@ export default {
 
 
             // Send a POST request to add the new post to the server
-            axios.post('http://localhost:3000/mahasiswa', this.newPost)
+            axios.post('http://localhost:3001/api/products', this.newPost)
                 .then(response => {
                     this.posts.push(response.data);
                     console.log(response.data);
@@ -253,6 +254,8 @@ export default {
                     this.success();
                     // Close the dialog
                     this.visible = false;
+                    // Refresh fetch posts
+                    this.fetchPosts();
                 })
                 .catch(error => {
                     console.log(error);
@@ -272,7 +275,7 @@ export default {
         },
 
         updatePost() {
-            axios.put(`http://localhost:3000/mahasiswa/${this.selectedPost.id}`, this.selectedPost)
+            axios.put(`http://localhost:3001/api/products/${this.selectedPost.nim}`, this.selectedPost)
                 .then(response => {
                     const updatedPost = response.data;
                     const index = this.posts.findIndex(post => post.id === updatedPost.id);
@@ -280,6 +283,8 @@ export default {
                     this.posts.splice(index, 1, updatedPost);
                     this.visible1 = false;
                     this.change();
+                    // Refresh fetch posts
+                    this.fetchPosts();
 
                 })
 
@@ -290,6 +295,7 @@ export default {
             this.posts.splice(index, 1);
             this.deleteConfirmed()
             this.visible2 = false;
+            this.del();
         },
 
         confirm2(post) {
@@ -299,7 +305,7 @@ export default {
         },
 
         deleteConfirmed() {
-            axios.delete(`http://localhost:3000/mahasiswa/${this.selectedPost.id}`, this.selectedPost)
+            axios.delete(`http://localhost:3001/api/products/${this.selectedPost.nim}`, this.selectedPost)
                 .then(() => {
                     console.log('Post deleted successfully!');
                     this.del()
