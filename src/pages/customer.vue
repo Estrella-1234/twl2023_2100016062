@@ -2,8 +2,8 @@
     <div>
         <uploadProfile />
     </div>
-    <br><br><br>
-    <h2>Data Mahasiswa</h2>
+    
+    <h3 class="font-serif font-semibold text-3xl pb-3">Data Mahasiswa</h3>
 
     <div class="pl-8 pr-8">
         <div class="overflow-x-auto">
