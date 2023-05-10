@@ -1,6 +1,8 @@
 <template >
-    <div>
-        <h2>Upload File</h2>
+    <div class="justify-content-center text-left pl-8 pb-7" @click="visible = true">
+        <Button label="Tambah Data" class="text-center" icon="pi pi-user-plus" />
+        <Dialog v-model:visible="visible" modal header="Form Data Mahasiswa" :style="{ width: '50vw' }">
+            <h2>Upload File</h2>
         <form @submit.prevent="uploadFile">
             <div>
                 <label for="nim">NIM:</label>
@@ -24,14 +26,33 @@
             </div>
             <button type="submit">Upload</button>
         </form>
+        </Dialog>
+
     </div>
 </template>
 
 
 <script>
 import axios from 'axios';
+import Button from 'primevue/button';
+import { ref } from 'vue';
+import Dialog from 'primevue/dialog';
+
 export default {
     name: 'uploadProfile',
+
+    components: {
+        Button,
+        Dialog,
+    },
+
+    setup() {
+        const visible = ref(false);
+        return {
+            visible,
+
+        }
+    },
 
     data() {
         return {
