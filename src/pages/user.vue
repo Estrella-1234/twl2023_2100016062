@@ -47,7 +47,7 @@
             <table class="border border-collapse border-black table-auto">
                 <thead>
                     <tr class="bg-slate-600 text-white m-5 mt-2 mb-2">
-                        <th class="border border-black w-1/8">NIM</th>
+                        <th class="border border-black w-1/8 pt-2 pb-2">NIM</th>
                         <th class="border border-black w-1/2">Nama</th>
                         <th class="border border-black w-1/2">Alamat</th>
                         <th class="border border-black w-1/2">E-Mail</th>

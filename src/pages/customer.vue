@@ -25,6 +25,33 @@
             <button type="submit">Upload</button>
         </form>
     </div>
+
+
+    <div class="pt-12">
+        <h2>Data Mahasiswa</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>NIM</th>
+                    <th>Nama</th>
+                    <th>Email</th>
+                    <th>Alamat</th>
+                    <th>Foto</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="mahasiswa in mahasiswas" :key="mahasiswa.id">
+                    <td>
+                        <img :src="mahasiswa.imagePath" class="rounded-full" alt="foto" width="100" />
+                    </td>
+                    <td>{{ mahasiswa.nim }}</td>
+                    <td>{{ mahasiswa.nama }}</td>
+                    <td>{{ mahasiswa.email }}</td>
+                    <td>{{ mahasiswa.alamat }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </template>
   
 <script>
@@ -37,9 +64,32 @@ export default {
             nama: '',
             email: '',
             alamat: '',
+
+            mahasiswas: [],
+            imagePath: null,
         }
     },
+
+    mounted() {
+        this.fetchData();
+    },
+
     methods: {
+        async fetchData() {
+            try {
+                const response = await axios.get('http://localhost:3000/api/products');
+                this.mahasiswas = response.data;
+                console.log(this.mahasiswas);
+
+                // Menambahkan base url pada imagePath
+                this.mahasiswas.forEach(mahasiswa => {
+                    mahasiswa.imagePath = 'http://localhost:3000/Images/Profiles/' + mahasiswa.imagePath;
+                });
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
         async uploadFile() {
             const fileInput = this.$refs.fileInput;
             const file = fileInput.files[0];
