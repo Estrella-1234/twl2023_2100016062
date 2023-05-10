@@ -1,74 +1,51 @@
 <template>
     <div>
-        <h2>Upload File</h2>
-        <form @submit.prevent="uploadFile">
-            <div>
-                <label for="nim">NIM:</label>
-                <input type="text" id="nim" v-model="nim" />
-            </div>
-            <div>
-                <label for="nama">Nama:</label>
-                <input type="text" id="nama" v-model="nama" />
-            </div>
-            <div>
-                <label for="email">Email:</label>
-                <input type="email" id="email" v-model="email" />
-            </div>
-            <div>
-                <label for="alamat">Alamat:</label>
-                <input type="text" id="alamat" v-model="alamat" />
-            </div>
-            <div>
-                <label for="image">File:</label>
-                <input type="file" id="image" ref="fileInput" />
-            </div>
-            <button type="submit">Upload</button>
-        </form>
+        <uploadProfile/>
     </div>
+<br><br><br>
+    <h2>Data Mahasiswa</h2>
 
-
-    <div class="pt-12">
-        <h2>Data Mahasiswa</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>NIM</th>
-                    <th>Nama</th>
-                    <th>Email</th>
-                    <th>Alamat</th>
-                    <th>Foto</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="mahasiswa in mahasiswas" :key="mahasiswa.id">
-                    <td>
-                        <img :src="mahasiswa.imagePath" class="rounded-full" alt="foto" width="100" />
-                    </td>
-                    <td>{{ mahasiswa.nim }}</td>
-                    <td>{{ mahasiswa.nama }}</td>
-                    <td>{{ mahasiswa.email }}</td>
-                    <td>{{ mahasiswa.alamat }}</td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="pl-8 pr-8">
+        <div class="overflow-x-auto">
+            <table class="border border-collapse border-black table-auto">
+                <thead>
+                    <tr class="bg-slate-600 text-white m-5">
+                        <th class="border border-black w-1/6 pt-2 pb-2">Foto</th>
+                        <th class="border border-black w-1/8">NIM</th>
+                        <th class="border border-black w-1/2">Nama</th>
+                        <th class="border border-black w-1/2">Email</th>
+                        <th class="border border-black w-1/2">Alamat</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="mahasiswa in mahasiswas" :key="mahasiswa.id">
+                        <td class="border border-black py-2 px-2 align-middle flex justify-center items-center">
+                            <img :src="mahasiswa.imagePath" class="rounded-full" alt="foto" width="100" />
+                        </td>
+                        <td class="border border-black py-2 px-2 text-center">{{ mahasiswa.nim }}</td>
+                        <td class="border border-black py-2 px-2 text-left">{{ mahasiswa.nama }}</td>
+                        <td class="border border-black py-2 px-2 text-left">{{ mahasiswa.email }}</td>
+                        <td class="border border-black py-2 px-2 text-left">{{ mahasiswa.alamat }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </template>
-  
+
 <script>
 import axios from 'axios';
-
+import uploadProfile from '../components/uploadProfile.vue';
 export default {
-    data() {
+    components: {
+        uploadProfile
+    },
+data() {
         return {
-            nim: '',
-            nama: '',
-            email: '',
-            alamat: '',
-
             mahasiswas: [],
-            imagePath: null,
         }
     },
+
 
     mounted() {
         this.fetchData();
@@ -89,41 +66,9 @@ export default {
                 console.log(error);
             }
         },
-
-        async uploadFile() {
-            const fileInput = this.$refs.fileInput;
-            const file = fileInput.files[0];
-            const formData = new FormData();
-            formData.append('image', file);
-
-            try {
-                const response = await axios.post('http://localhost:3000/api/upload', formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    }
-                });
-                const imagePath = response.data.path;
-
-                console.log(' Foto berhasil diupload');
-
-                const { nim, nama, email, alamat } = this;
-                const data = { nim, nama, email, alamat, imagePath };
-
-                console.log(data); // menampilkan data produk di console
-
-                await axios.post('http://localhost:3000/api/products', data)
-                    .then(response => {
-                        console.log(response);
-                    })
-                    .catch(error => {
-                        console.log(error);
-                    });
-
-                console.log('Data mahasiswa berhasil ditambahkan');
-            } catch (error) {
-                console.log(error);
-            }
-        }
     }
+
 }
+
+
 </script>
