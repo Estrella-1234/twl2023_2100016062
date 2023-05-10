@@ -46,8 +46,10 @@ export default {
     },
 
 
+methods: {
 
     async uploadFile() {
+        console.log('Button works');
         const fileInput = this.$refs.fileInput;
         const file = fileInput.files[0];
         const formData = new FormData();
@@ -80,7 +82,24 @@ export default {
         } catch (error) {
             console.log(error);
         }
-    }
+    },
+
+    async fetchData() {
+            try {
+                const response = await axios.get('http://localhost:3000/api/products');
+                this.mahasiswas = response.data;
+                console.log(this.mahasiswas);
+
+                // Menambahkan base url pada imagePath
+                this.mahasiswas.forEach(mahasiswa => {
+                    mahasiswa.imagePath = 'http://localhost:3000/Images/Profiles/' + mahasiswa.imagePath;
+                });
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+}
 
 }
 </script>

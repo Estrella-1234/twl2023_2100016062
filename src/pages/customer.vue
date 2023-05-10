@@ -1,8 +1,8 @@
 <template>
     <div>
-        <uploadProfile/>
+        <uploadProfile />
     </div>
-<br><br><br>
+    <br><br><br>
     <h2>Data Mahasiswa</h2>
 
     <div class="pl-8 pr-8">
@@ -40,11 +40,20 @@ export default {
     components: {
         uploadProfile
     },
-data() {
+    data() {
         return {
+            nim: '',
+            nama: '',
+            email: '',
+            alamat: '',
+
             mahasiswas: [],
+            imagePath: null,
         }
     },
+
+
+
 
 
     mounted() {
@@ -66,7 +75,10 @@ data() {
                 console.log(error);
             }
         },
+
     }
+
+
 
 }
 
