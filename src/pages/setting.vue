@@ -1,11 +1,7 @@
 <template>
     <div>
-        <h1>Products</h1>
-        <ul>
-            <li v-for="product in products" :key="product.id">
-                {{ product.Product }} - {{ product.Price }}
-            </li>
-        </ul>
+        <input type="file" @change="handleFileUpload" accept="image/*">
+        <button @click="uploadImage">Upload</button>
     </div>
 </template>
   
@@ -15,14 +11,28 @@ import axios from 'axios';
 export default {
     data() {
         return {
-            products: [],
+            selectedFile: null
         };
     },
-    mounted() {
-        axios.get('http://localhost:3001/api/products').then((response) => {
-            this.products = response.data;
-        });
-    },
+    methods: {
+        handleFileUpload(event) {
+            this.selectedFile = event.target.files[0];
+        },
+        uploadImage() {
+            const formData = new FormData();
+            formData.append('image', this.selectedFile);
+
+            axios.post('http://localhost:3000/api/upload', formData)
+                .then(response => {
+                    console.log(response.data);
+                    // Handle the response as needed
+                })
+                .catch(error => {
+                    console.error(error);
+                    // Handle the error as needed
+                });
+        }
+    }
 };
 </script>
   

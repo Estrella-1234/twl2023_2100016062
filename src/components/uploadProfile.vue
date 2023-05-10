@@ -1,26 +1,34 @@
 <template >
     <div class="justify-content-center text-left pl-8 pb-7" @click="visible = true">
         <Button label="Tambah Data" class="text-center" icon="pi pi-user-plus" />
-        <Dialog v-model:visible="visible" modal header="Form Data Mahasiswa" :style="{ width: '50vw' }">
-            <h2>Upload File</h2>
+        <Dialog v-model:visible="visible" modal header="Upload Data" :style="{ width: '50vw' }">
         <form @submit.prevent="uploadFile">
-            <div>
-                <label for="nim">NIM:</label>
-                <input type="text" id="nim" v-model="nim" />
+            <div class="mb-4">
+                <label for="nim" class="block font-semibold mb-2">NIM:</label>
+                <!-- <input type="text" id="nim" v-model="nim" /> -->
+                <InputNumber v-model="nim" inputId="withoutgrouping" :useGrouping="false" class="w-full"
+                    id="nim" />
             </div>
-            <div>
-                <label for="nama">Nama:</label>
-                <input type="text" id="nama" v-model="nama" />
+
+            <div class="mb-4">
+                <label for="nama" class="block font-semibold mb-2">Nama:</label>
+                <!-- <input type="text" id="nama" v-model="nama" /> -->
+                <InputText id="nama" v-model="nama" class="w-full" />
             </div>
-            <div>
+
+            <div class="mb-4">
                 <label for="email">Email:</label>
-                <input type="email" id="email" v-model="email" />
+                <!-- <input type="email" id="email" v-model="email" /> -->
+                <InputText id="email" v-model="email" class="w-full" />
             </div>
-            <div>
+
+            <div class="mb-4">
                 <label for="alamat">Alamat:</label>
-                <input type="text" id="alamat" v-model="alamat" />
+                <!-- <input type="text" id="alamat" v-model="alamat" /> -->
+                <InputText id="alamat" v-model="alamat" class="w-full" />
             </div>
-            <div>
+        
+            <div class="mb-4">
                 <label for="image">File:</label>
                 <input type="file" id="image" ref="fileInput" />
             </div>
@@ -37,6 +45,8 @@ import axios from 'axios';
 import Button from 'primevue/button';
 import { ref } from 'vue';
 import Dialog from 'primevue/dialog';
+import InputText from 'primevue/inputtext';
+import InputNumber from 'primevue/inputnumber';
 
 export default {
     name: 'uploadProfile',
@@ -44,6 +54,8 @@ export default {
     components: {
         Button,
         Dialog,
+        InputText,
+        InputNumber,
     },
 
     setup() {
