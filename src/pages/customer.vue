@@ -4,7 +4,6 @@
     </div>
     
     <h3 class="font-serif font-semibold text-3xl pb-3">Data Mahasiswa</h3>
-
     <div class="pl-8 pr-8">
         <div class="overflow-x-auto">
             <table class="border border-collapse border-black table-auto">
