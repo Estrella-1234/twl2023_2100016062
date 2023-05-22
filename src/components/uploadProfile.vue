@@ -1,15 +1,15 @@
 <template >
     <div class="justify-content-center text-left pl-8 pb-3" @click="visible = true">
-        
+
         <div class="pt-8">
-            <Button label="Tambah Data" class="text-center" icon="pi pi-user-plus" severity="success"/>
+            <Button label="Tambah Data" class="text-center" icon="pi pi-user-plus" severity="success" />
         </div>
-        <Dialog v-model:visible="visible" modal header="Upload Data" :style="{ width: '50vw' }">
+        <Dialog v-model:visible="visible" @close="handleDialogClose" modal header="Upload Data" :style="{ width: '50vw' }">
             <form @submit.prevent="uploadFile">
                 <div class="mb-4">
                     <label for="nim" class="block font-semibold mb-2">NIM:</label>
                     <!-- <input type="text" id="nim" v-model="nim" /> -->
-                    <InputNumber v-model="nim" inputId="withoutgrouping" :useGrouping="false" class="w-full" id="nim" />
+                    <InputNumber v-model="nim" inputId="withoutgrouping"  :useGrouping="false" class="w-full" id="nim" />
                 </div>
 
                 <div class="mb-4">
@@ -75,19 +75,34 @@ export default {
 
     data() {
         return {
-            nim: '',
+            nim: 0,
             nama: '',
             email: '',
             alamat: '',
 
             mahasiswas: [],
-            imagePath: null,
+            imageName: null,
         }
     },
 
 
     methods: {
+        // method / function untuk menutup dan mengupdate data
+        handleDialogClose() {
+            const updatedData = {
+                nim: this.nim,
+                nama: this.nama,
+                email: this.email,
+                alamat: this.alamat,
+                imageName: this.imageName,
+            };
+            this.$emit('update-data', updatedData);
+            this.visible = false; // Close the dialog
+        },
 
+
+
+        // method / fuction untuk mengupload file
         async uploadFile() {
             console.log('Button works');
             const fileInput = this.$refs.fileInput;
@@ -101,24 +116,24 @@ export default {
                         'Content-Type': 'multipart/form-data'
                     }
                 });
-                const imagePath = response.data.path;
-
-                console.log(' Foto berhasil diupload');
+                const imageName = response.data.path;
 
                 const { nim, nama, email, alamat } = this;
-                const data = { nim, nama, email, alamat, imagePath };
+                const data = { nim, nama, email, alamat, imageName };
 
-                console.log(data); // menampilkan data produk di console
+                // console.log(data); // menampilkan data produk di console
 
                 await axios.post('http://localhost:3000/api/products', data)
                     .then(response => {
-                        console.log(response);
+                        this.response = response;
+                        console.log("Uploaded");
                     })
                     .catch(error => {
                         console.log(error);
                     });
 
-                console.log('Data mahasiswa berhasil ditambahkan');
+                alert('Data berhasil ditambahkan');
+                this.handleDialogClose();
             } catch (error) {
                 console.log(error);
             }
@@ -130,9 +145,9 @@ export default {
                 this.mahasiswas = response.data;
                 console.log(this.mahasiswas);
 
-                // Menambahkan base url pada imagePath
+                // Menambahkan base url pada imageName
                 this.mahasiswas.forEach(mahasiswa => {
-                    mahasiswa.imagePath = 'http://localhost:3000/Images/Profiles/' + mahasiswa.imagePath;
+                    mahasiswa.imageName = 'http://localhost:3000/Images/Profiles/' + mahasiswa.imageName;
                 });
             } catch (error) {
                 console.log(error);
