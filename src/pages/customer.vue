@@ -1,6 +1,7 @@
 <template>
-    <div>
-        <uploadProfile @update-data="handleDataUpdate"></uploadProfile>
+    <div class="flex">
+        <uploadProfile @update-data="handleDataUpdate, showToast"></uploadProfile>
+        <!-- <Button @click="showToast" label="Show" /> -->
     </div>
 
     <h3 class="font-serif font-semibold text-3xl pb-3">Data Mahasiswa</h3>
@@ -14,32 +15,57 @@
                         <th class="border border-black w-1/2">Nama</th>
                         <th class="border border-black w-1/2">Email</th>
                         <th class="border border-black w-1/2">Alamat</th>
+                        <th class="border border-black w-1/2">Edit</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="mahasiswa in mahasiswas" :key="mahasiswa.id">
-                        <td class="border border-black py-2 px-2 align-middle flex justify-center items-center">
-                            <img :src="mahasiswa.imageName" class="rounded-full" alt="foto" width="100" />
+                        <td class="border border-black py-2 px-2 ">
+                            <div class="flex justify-center items-center h-full">
+                                <img :src="mahasiswa.imageName" class="rounded-full object-contain h-20 w-20 block"
+                                    id="foto" alt="foto" />
+                            </div>
                         </td>
                         <td class="border border-black py-2 px-2 text-center">{{ mahasiswa.nim }}</td>
                         <td class="border border-black py-2 px-2 text-left">{{ mahasiswa.nama }}</td>
                         <td class="border border-black py-2 px-2 text-left">{{ mahasiswa.email }}</td>
                         <td class="border border-black py-2 px-2 text-left">{{ mahasiswa.alamat }}</td>
+                        <td class="border border-black py-2 px-2 text-center">
+                            <div class="flex justify-center space-x-2">
+                                <Button label="" class="" icon="pi pi-user-edit" severity="warning" />
+                                <deleteProfile></deleteProfile>
+                                <!-- <Button label="" class="" icon="pi pi-user-minus" severity="danger" /> -->
+                            </div>
+                        </td>
+
                     </tr>
                 </tbody>
             </table>
         </div>
+        <Toast></Toast>
     </div>
 </template>
 
 <script>
 import axios from 'axios';
 import uploadProfile from '../components/uploadProfile.vue';
+import deleteProfile from '../components/deleteProfile.vue';
+import Button from 'primevue/button';
+import { useToast } from 'primevue/usetoast';
+
+
+
+
+
+
 export default {
     components: {
-        uploadProfile
+        uploadProfile,
+        Button,
+        deleteProfile,
     },
     data() {
+
         return {
             nim: '',
             nama: '',
@@ -51,8 +77,12 @@ export default {
         }
     },
 
-
-
+    setup() {
+        const toast = useToast();
+        return {
+            toast,
+        };
+    },
 
 
     mounted() {
@@ -60,21 +90,29 @@ export default {
     },
 
     methods: {
-        handleDataUpdate(mahasiswas) {
+        // Toast Message
+        showToast() {
+            console.log('Show Toast button clicked');
+            const toast = this.$toast;
+            toast.add({
+                severity: 'success',
+                summary: 'Success Message',
+                detail: 'Message Content',
+                life: 3000,
+            });
+        },
+
+        handleDataUpdate() {
             // Update your main component's data with the updatedData object
-            this.nim = mahasiswas.nim;
-            this.nama = mahasiswas.nama;
-            this.email = mahasiswas.email;
-            this.alamat = mahasiswas.alamat;
-            this.imageName = mahasiswas.imageName;
-            console.log(this.imageName);
+            this.fetchData();
+            this.show();
         },
 
         async fetchData() {
             try {
                 const response = await axios.get('http://localhost:3000/api/products');
                 this.mahasiswas = response.data;
-                console.log(this.mahasiswas);
+                console.log(this.$toast);
 
                 // Menambahkan base url pada imageName
                 this.mahasiswas.forEach(mahasiswa => {
@@ -93,3 +131,4 @@ export default {
 
 
 </script>
+<style></style>

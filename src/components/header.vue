@@ -8,7 +8,8 @@
         <!-- <InputText type="text" v-model="value"  placeholder="Search.." /> -->
         <span class="p-input-icon-left">
         <i class="pi pi-search"/>
-        <InputText v-model="value1" class="h-[40px]" placeholder="Search" />
+        <!-- <InputText v-model="value1" class="h-[40px]" placeholder="Search" /> -->
+        <InputText class="h-[40px]" placeholder="Search" />
         </span>
       </div>
       <div class="flex space-x-3 items-center justify-center px-3">

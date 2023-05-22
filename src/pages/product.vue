@@ -1,6 +1,6 @@
 <template>
     <div>
-        
+        <Toast></Toast>
         <h3 class="font-serif font-semibold text-3xl pt-4">Data Mahasiswa</h3>
 
         <!-- Pop Up Form Input-->

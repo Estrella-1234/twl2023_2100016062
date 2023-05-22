@@ -1,15 +1,16 @@
 <template >
-    <div class="justify-content-center text-left pl-8 pb-3" @click="visible = true">
+    <div class="justify-content-center text-left pl-8 pb-3">
 
         <div class="pt-8">
-            <Button label="Tambah Data" class="text-center" icon="pi pi-user-plus" severity="success" />
+            <Button @click="visible = true" label="Tambah Data" class="text-center" icon="pi pi-user-plus" severity="success" />
         </div>
         <Dialog v-model:visible="visible" @close="handleDialogClose" modal header="Upload Data" :style="{ width: '50vw' }">
             <form @submit.prevent="uploadFile">
                 <div class="mb-4">
                     <label for="nim" class="block font-semibold mb-2">NIM:</label>
                     <!-- <input type="text" id="nim" v-model="nim" /> -->
-                    <InputNumber v-model="nim" inputId="withoutgrouping"  :useGrouping="false" class="w-full" id="nim" />
+                    <InputNumber placeholder="2100000000" v-model="nim" inputId="withoutgrouping" :useGrouping="false"
+                        class="w-full" id="nim" />
                 </div>
 
                 <div class="mb-4">
@@ -21,7 +22,7 @@
                 <div class="mb-4">
                     <label for="email" class="block font-semibold mb-2">Email:</label>
                     <!-- <input type="email" id="email" v-model="email" /> -->
-                    <InputText id="email" v-model="email" class="w-full" />
+                    <InputText placeholder="example@gmail.com" id="email" v-model="email" class="w-full" />
                 </div>
 
                 <div class="mb-4">
@@ -126,7 +127,7 @@ export default {
                 await axios.post('http://localhost:3000/api/products', data)
                     .then(response => {
                         this.response = response;
-                        console.log("Uploaded");
+                        console.log(response);
                     })
                     .catch(error => {
                         console.log(error);
