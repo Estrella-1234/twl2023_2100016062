@@ -65,7 +65,6 @@ export default {
         deleteProfile,
     },
     data() {
-
         return {
             nim: '',
             nama: '',
