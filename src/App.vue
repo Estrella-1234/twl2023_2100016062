@@ -9,7 +9,17 @@ export default {
   name: 'App',
   components: {
 
-  }
+  },
+
+  methods: {
+    fetchData() {
+      this.mahasiswas.forEach(mahasiswa => {
+        mahasiswa.imageName = 'http://localhost:3000/Images/Profiles/' + mahasiswa.imageName;
+        mahasiswa.id = mahasiswa.nim; // Menambahkan properti 'id' dengan nilai 'nim'
+      });
+
+    },
+  },
 }
 </script>
 
