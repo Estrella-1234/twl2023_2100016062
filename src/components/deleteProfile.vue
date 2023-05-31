@@ -15,9 +15,6 @@
 <script>
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
-// import axios from 'axios';
-
-
 
 export default {
     name: 'deleteProfile',
@@ -30,19 +27,17 @@ export default {
     data() {
         return {
             visible: false,
+            nim: '',
         };
     },
 
     methods: {
         confirmDelete() {
             this.$emit('delete', this.nim);
-            console.log(this.mahasiswas)
-
+            console.log("Delete" + this.nim);
         },
-
     },
 }
 </script>
   
 <style scoped></style>
-  

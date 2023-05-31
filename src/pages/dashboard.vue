@@ -36,6 +36,18 @@
                 <!-- <Button label="" class="" icon="pi pi-user-edit" severity="warning" /> -->
                 <deleteProfile @delete="deletePost(mahasiswas)"></deleteProfile>
                 <!-- <Button label="" class="" icon="pi pi-user-minus" severity="danger" /> -->
+                <Button label="" @click="visible = true" class="bg-red-500 text-white" icon="pi pi-user-minus"
+                  severity="danger" />
+                {{ visible }}
+                <Dialog v-model:visible="visible" modal header="Hapus Data" :style="{ width: '400px' }">
+                  <p>Are you sure you want to delete this data?</p>
+                  <div class="flex justify-end space-x-4 pt-6">
+                    <Button label="Cancel" class="p-button-text text-gray-500" @click="visible = false" />
+                    <Button label="Delete" class="p-button-danger" @click="confirmDelete" />
+                  </div>
+                </Dialog>
+
+                
               </div>
             </td>
 
@@ -52,7 +64,7 @@ import axios from 'axios';
 import uploadProfile from '../components/uploadProfile.vue';
 import deleteProfile from '../components/deleteProfile.vue';
 import editProfile from '../components/editProfile.vue';
-// import Button from 'primevue/button';
+import Button from 'primevue/button';
 import { useToast } from 'primevue/usetoast';
 
 
@@ -63,12 +75,13 @@ import { useToast } from 'primevue/usetoast';
 export default {
   components: {
     uploadProfile,
-    // Button,
+    Button,
     deleteProfile,
     editProfile,
   },
   data() {
     return {
+      visible: false,
       nim: '',
       nama: '',
       email: '',
@@ -94,7 +107,7 @@ export default {
   methods: {
     // Delete Data
     async deletePost(nim) {
-      console.log('Delete button clicked'+ nim);
+      console.log('Delete button clicked' + nim);
       try {
         const apiEndpoint = `http://localhost:3000/api/products/${nim}`;
         await axios.delete(apiEndpoint);
@@ -103,7 +116,7 @@ export default {
         console.log(error);
       }
     },
-  
+
     // Toast Message
     showToast() {
       console.log('Show Toast button clicked');
