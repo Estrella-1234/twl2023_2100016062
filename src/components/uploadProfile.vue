@@ -76,7 +76,7 @@ export default {
 
     data() {
         return {
-            nim: 0,
+            nim: null,
             nama: '',
             email: '',
             alamat: '',
