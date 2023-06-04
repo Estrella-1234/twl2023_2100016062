@@ -3,8 +3,8 @@
         <h3 class="font-serif font-semibold text-3xl pt-5 ">Data Dosen</h3>
         <!-- Pop Up Form Input-->
         <div class="justify-content-center text-left pl-8 pb-7">
-            <Button label="Tambah Data" class="text-center" icon="pi pi-user-plus" @click="visible = true" />
-            <Dialog v-model:visible="visible" modal header="Form Data Mahasiswa" :style="{ width: '50vw' }">
+            <Button label="Tambah Data" class="text-center" icon="pi pi-user-plus" @click="visible = true" severity="success"/>
+            <Dialog v-model:visible="visible" modal header="Form Data Dosen" :style="{ width: '50vw' }">
                 <div class="p-4 bg-white rounded-lg shadow-md">
 
                     <form @submit.prevent="submitForm">
