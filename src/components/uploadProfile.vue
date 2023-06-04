@@ -1,8 +1,9 @@
 <template >
     <div class="justify-content-center text-left pl-8 pb-3">
-
+        <Toast></Toast>
         <div class="pt-8">
-            <Button @click="visible = true" label="Tambah Data" class="text-center" icon="pi pi-user-plus" severity="success" />
+            <Button @click="visible = true" label="Tambah Data" class="text-center" icon="pi pi-user-plus"
+                severity="success" />
         </div>
         <Dialog v-model:visible="visible" @close="handleDialogClose" modal header="Upload Data" :style="{ width: '50vw' }">
             <form @submit.prevent="uploadFile">
@@ -22,7 +23,8 @@
                 <div class="mb-4">
                     <label for="email" class="block font-semibold mb-2">Email:</label>
                     <!-- <input type="email" id="email" v-model="email" /> -->
-                    <InputText placeholder="example@gmail.com" id="email" v-model="email" class="w-full" />
+                    <InputText placeholder="example@gmail.com" id="email" v-model="email" class="w-full"
+                        />
                 </div>
 
                 <div class="mb-4">
@@ -43,7 +45,6 @@
                 <!-- <button type="submit">Upload</button> -->
             </form>
         </Dialog>
-
     </div>
 </template>
 
@@ -55,6 +56,8 @@ import { ref } from 'vue';
 import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
 import InputNumber from 'primevue/inputnumber';
+import Toast from 'primevue/toast';
+
 
 export default {
     name: 'uploadProfile',
@@ -64,6 +67,7 @@ export default {
         Dialog,
         InputText,
         InputNumber,
+        Toast,
     },
 
     setup() {
@@ -83,6 +87,7 @@ export default {
 
             mahasiswas: [],
             imageName: null,
+
         }
     },
 
@@ -101,10 +106,27 @@ export default {
             this.visible = false; // Close the dialog
         },
 
-
+        validateEmail(email) {
+            // Regular expression to validate email format
+            const re = /\S+@\S+\.\S+/;
+            return re.test(email);
+        },
 
         // method / fuction untuk mengupload file
         async uploadFile() {
+            if (!this.nim || !this.nama || !this.email || !this.alamat) {
+                alert('Data tidak boleh kosong');
+                return;
+            }
+
+            if (!this.validateEmail(this.email)) {
+                alert('Email tidak valid');
+                return;
+            }
+
+
+
+
             console.log('Button works');
             const fileInput = this.$refs.fileInput;
             const file = fileInput.files[0];

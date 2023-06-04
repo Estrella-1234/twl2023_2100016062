@@ -1,156 +1,42 @@
 <template>
-  <div class="flex">
-    <uploadProfile @update-data="handleDataUpdate, showToast"></uploadProfile>
-    <!-- <Button @click="showToast" label="Show" /> -->
-  </div>
+  <div class="container mx-auto px-4 py-8">
+    <h1 class="text-2xl font-bold mb-4">Dashboard Pengelolaan Data Mahasiswa</h1>
+    <p class="mb-6">Mengelola data siswa/mahasiswa menjadi lebih mudah dengan dashboard kami. Dapatkan kendali penuh atas informasi penting seperti data personal, perkembangan akademik, dan informasi lainnya dengan antarmuka yang intuitif dan mudah digunakan.</p>
 
-  <h3 class="font-serif font-semibold text-3xl pb-3">Data Mahasiswa</h3>
-  <div class="pl-8 pr-8">
-    <div class="overflow-x-auto">
-      <table class="border border-collapse border-black table-auto">
-        <thead>
-          <tr class="bg-slate-600 text-white m-5">
-            <th class="border border-black w-1/6 pt-2 pb-2">Foto</th>
-            <th class="border border-black w-1/8">NIM</th>
-            <th class="border border-black w-1/2">Nama</th>
-            <th class="border border-black w-1/6">Email</th>
-            <th class="border border-black w-1/2">Alamat</th>
-            <th class="border border-black w-1/2">Edit</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="mahasiswa in mahasiswas" :key="mahasiswa.id">
-            <td class="border border-black py-2 px-2 ">
-              <div class="flex justify-center items-center h-full">
-                <img :src="mahasiswa.imageName" class="rounded-full object-contain h-20 w-20 block" id="foto"
-                  alt="foto" />
-              </div>
-            </td>
-            <td class="border border-black py-2 px-2 text-center">{{ mahasiswa.nim }}</td>
-            <td class="border border-black py-2 px-2 text-left">{{ mahasiswa.nama }}</td>
-            <td class="border border-black py-2 px-2 text-left">{{ mahasiswa.email }}</td>
-            <td class="border border-black py-2 px-2 text-left">{{ mahasiswa.alamat }}</td>
-            <td class="border border-black py-2 px-2 text-center">
-              <div class="flex justify-center space-x-2">
-                <editProfile></editProfile>
-                <!-- <Button label="" class="" icon="pi pi-user-edit" severity="warning" /> -->
-                <Button label="" @click="visible = true" class="bg-red-500 text-white" icon="pi pi-user-minus"
-                  severity="danger" />
-                <Dialog v-model:visible="visible" modal header="Hapus Data" :style="{ width: '400px' }">
-                  <p>Are you sure you want to delete this data?</p>
-                  <div class="flex justify-end space-x-4 pt-6">
-                    <Button label="Cancel" class="p-button-text text-gray-500" @click="visible = false" />
-                    <Button label="Delete" class="p-button-danger"  @click="deletePost(mahasiswa.nim)"/>
-                  </div>
-                </Dialog>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="bg-white p-4 shadow-md rounded-lg">
+        <h2 class="text-xl font-bold mb-2">Manajemen Data Siswa/Mahasiswa</h2>
+        <p>Tambahkan, hapus, dan perbarui informasi siswa/mahasiswa secara efisien. Mulai dari data personal, informasi kontak, hingga riwayat akademik, semuanya dapat dikelola dengan mudah melalui dashboard ini.</p>
+      </div>
 
-                
-              </div>
-            </td>
+      <div class="bg-white p-4 shadow-md rounded-lg">
+        <h2 class="text-xl font-bold mb-2">Perkembangan Akademik</h2>
+        <p>Pantau kemajuan siswa/mahasiswa melalui fitur ini. Dapatkan akses langsung ke nilai, absensi, jadwal kuliah, dan catatan lainnya untuk setiap individu. Hal ini membantu dalam memantau dan memperbaiki kinerja akademik mereka.</p>
+      </div>
 
-          </tr>
-        </tbody>
-      </table>
+      <div class="bg-white p-4 shadow-md rounded-lg">
+        <h2 class="text-xl font-bold mb-2">Komunikasi dan Notifikasi</h2>
+        <p>Dengan dashboard ini, Anda dapat mengirim pesan dan pemberitahuan penting kepada siswa/mahasiswa secara efisien. Beri tahu mereka tentang pengumuman, perubahan jadwal, atau informasi lainnya dengan mudah melalui fitur komunikasi terintegrasi.</p>
+      </div>
+
+      <div class="bg-white p-4 shadow-md rounded-lg">
+        <h2 class="text-xl font-bold mb-2">Keamanan Data</h2>
+        <p>Keamanan data siswa/mahasiswa adalah prioritas kami. Kami mengimplementasikan langkah-langkah keamanan yang kuat untuk melindungi informasi sensitif dan menjaga privasi mereka.</p>
+      </div>
+
+      <!-- Tambahkan div lainnya untuk fitur-fitur lainnya -->
+
     </div>
-    <Toast></Toast>
+
+    <button class="bg-green-600 hover:bg-green-800 text-white font-bold py-2 px-4 mt-8 rounded">Hubungi Kami</button>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
-import uploadProfile from '../components/uploadProfile.vue';
-import editProfile from '../components/editProfile.vue';
-import Button from 'primevue/button';
-import { useToast } from 'primevue/usetoast';
-import Dialog from 'primevue/dialog';
-
-
-
-
-
 export default {
-  components: {
-    uploadProfile,
-    Button,
-    editProfile,
-    Dialog,
-  },
-  data() {
-    return {
-      visible: false,
-      nim: null,
-      nama: '',
-      email: '',
-      alamat: '',
-
-      mahasiswas: [],
-      imageName: null,
-    }
-  },
-
-  setup() {
-    const toast = useToast();
-    return {
-      toast,
-    };
-  },
-
-
-  mounted() {
-    this.fetchData();
-  },
-
-  methods: {
-    // Delete Data
-    async deletePost(nim) {
-      try {
-        const apiEndpoint = `http://localhost:3000/api/products/${nim}`;
-        await axios.delete(apiEndpoint);
-        this.fetchData(); // Trigger the fetch function to update the data after deletion
-      } catch (error) {
-        console.log(error);
-      }
-    },
-
-    // Toast Message
-    showToast() {
-      console.log('Show Toast button clicked');
-      const toast = this.$toast;
-      toast.add({
-        severity: 'success',
-        summary: 'Success Message',
-        detail: 'Message Content',
-        life: 3000,
-      });
-    },
-
-    handleDataUpdate() {
-      // Update your main component's data with the updatedData object
-      this.fetchData();
-      this.show();
-    },
-
-    async fetchData() {
-      try {
-        const response = await axios.get('http://localhost:3000/api/products');
-        this.mahasiswas = response.data;
-        console.log(this.$toast);
-
-        // Menambahkan base url pada imageName
-        this.mahasiswas.forEach(mahasiswa => {
-          mahasiswa.imageName = 'http://localhost:3000/Images/Profiles/' + mahasiswa.imageName;
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    },
-
-  }
-
-
-
 }
-
-
 </script>
-<style></style>
+
+<style>
+/* Gunakan Tailwind CSS di sini */
+</style>

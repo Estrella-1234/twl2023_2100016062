@@ -1,7 +1,6 @@
 <template>
     <div>
-        <Toast></Toast>
-        <h3 class="font-serif font-semibold text-3xl pt-4">Data Mahasiswa</h3>
+        <h3 class="font-serif font-semibold text-3xl pt-4">Data Dosen</h3>
 
         <!-- Pop Up Form Input-->
         <div class="justify-content-center text-left pl-8 pb-7">
@@ -11,24 +10,24 @@
 
                     <form @submit.prevent="submitForm">
                         <div class="mb-4">
-                            <label for="nama" class="block font-semibold mb-2">Nama:</label>
-                            <InputText id="nama" v-model="newPost.nama" class="w-full" />
-
+                            <label for="NIY" class="block font-semibold mb-2">NIY:</label>
+                            <InputNumber v-model="newPost.NIY" inputId="withoutgrouping" :useGrouping="false" class="w-full"
+                                id="NIY" />
                         </div>
-                        <div class="mb-4">
-                            <label for="nim" class="block font-semibold mb-2">NIM:</label>
-                            <InputNumber v-model="newPost.nim" inputId="withoutgrouping" :useGrouping="false" class="w-full"
-                                id="nim" />
 
-                        </div>
                         <div class="mb-4">
-                            <label for="alamat" class="block font-semibold mb-2">Alamat:</label>
-                            <InputText id="alamat" v-model="newPost.alamat" class="w-full" />
+                            <label for="Nama" class="block font-semibold mb-2">Nama:</label>
+                            <InputText id="Nama" v-model="newPost.Nama" class="w-full" />
+                        </div>
 
-                        </div>
                         <div class="mb-4">
-                            <label for="email" class="block font-semibold mb-2">Email:</label>
-                            <InputText id="email" v-model="newPost.email" class="w-full" />
+                            <label for="Alamat" class="block font-semibold mb-2">Alamat:</label>
+                            <InputText id="Alamat" v-model="newPost.Alamat" class="w-full" />
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="Jabatan" class="block font-semibold mb-2">Jabatan:</label>
+                            <InputText id="Jabatan" v-model="newPost.Jabatan" class="w-full" />
 
                         </div>
                         <div class="text-center">
@@ -46,20 +45,20 @@
         <div class="overflow-x-auto">
             <table class="border border-collapse border-black table-auto">
                 <thead>
-                    <tr class="bg-slate-600 text-white m-5 mt-2 mb-2">
-                        <th class="border border-black w-1/8 pt-2 pb-2">NIM</th>
+                    <tr class="bg-slate-600 text-white ">
+                        <th class="border border-black w-1/8 pt-2 pb-2">NIY</th>
                         <th class="border border-black w-1/2">Nama</th>
                         <th class="border border-black w-1/2">Alamat</th>
-                        <th class="border border-black w-1/2">E-Mail</th>
+                        <th class="border border-black w-1/6">Jabatan</th>
                         <th class="border border-black w-1/8">Edit</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="post in posts" :key="post.nim">
-                        <td class="border border-black py-2 px-2 text-center">{{ post.nim }} </td>
-                        <td class="border border-black py-2 px-2 text-left">{{ post.nama }}</td>
-                        <td class="border border-black py-2 px-2 text-left">{{ post.alamat }}</td>
-                        <td class="border border-black py-2 px-2 text-left">{{ post.email }}</td>
+                    <tr v-for="post in posts" :key="post.NIY">
+                        <td class="border border-black py-2 px-2 text-center">{{ post.NIY }} </td>
+                        <td class="border border-black py-2 px-2 text-left">{{ post.Nama }}</td>
+                        <td class="border border-black py-2 px-2 text-left">{{ post.Alamat }}</td>
+                        <td class="border border-black py-2 px-2 text-left">{{ post.Jabatan }}</td>
                         <td class="border border-black py-2 px-2">
 
                             <!-- Edit Data -->
@@ -71,21 +70,21 @@
                                     <div>
                                         <form @submit.prevent="updatePost()">
                                             <div class="mb-4">
-                                                <label for="nama" class="block font-semibold mb-2">Nama: </label>
-                                                <InputText id="nama" v-model="selectedPost.nama" class="w-full" />
+                                                <label for="Nama" class="block font-semibold mb-2">Nama: </label>
+                                                <InputText id="Nama" v-model="selectedPost.Nama" class="w-full" />
                                             </div>
                                             <div class="mb-4">
-                                                <label for="nim" class="block font-semibold mb-2">NIM:</label>
-                                                <InputNumber v-model="selectedPost.nim" inputId="withoutgrouping"
-                                                    :useGrouping="false" class="w-full" id="nim" />
+                                                <label for="NIY" class="block font-semibold mb-2">NIY:</label>
+                                                <InputNumber v-model="selectedPost.NIY" inputId="withoutgrouping"
+                                                    :useGrouping="false" class="w-full" id="NIY" />
                                             </div>
                                             <div class="mb-4">
-                                                <label for="alamat" class="block font-semibold mb-2">Alamat:</label>
-                                                <InputText id="alamat" v-model="selectedPost.alamat" class="w-full" />
+                                                <label for="Alamat" class="block font-semibold mb-2">Alamat:</label>
+                                                <InputText id="Alamat" v-model="selectedPost.Alamat" class="w-full" />
                                             </div>
                                             <div class="mb-4">
-                                                <label for="email" class="block font-semibold mb-2">Email:</label>
-                                                <InputText id="email" v-model="selectedPost.email" class="w-full" />
+                                                <label for="Jabatan" class="block font-semibold mb-2">Jabatan:</label>
+                                                <InputText id="Jabatan" v-model="selectedPost.Jabatan" class="w-full" />
                                             </div>
                                             <div class="text-center">
                                                 <Button label="Update" type="submit"
@@ -97,7 +96,7 @@
 
                                 <!-- Delete Data -->
                                 <Button icon="pi pi-trash" severity="danger" text raised aria-label="Delete"
-                                    @click="confirm2(post), test()" />
+                                    @click="confirm2(post)" />
                                 <Dialog v-model:visible="visible2" modal header="Hapus Data" :style="{ width: '400px' }">
                                     <p>Are you sure you want to delete this data?</p>
                                     <div class="flex justify-end space-x-4 pt-6 ">
@@ -199,15 +198,15 @@ export default {
             posts: [],
             showForm: false,
             id: '',
-            nama: '',
-            nim: 0,
-            alamat: '',
-            email: '',
+            Nama: '',
+            NIY: 0,
+            Alamat: '',
+            Jabatan: '',
             newPost: {
-                nama: "",
-                nim: 0,
-                alamat: "",
-                email: "",
+                Nama: "",
+                NIY: 0,
+                Alamat: "",
+                Jabatan: "",
             },
             selectedPost: null,
         }
@@ -216,9 +215,10 @@ export default {
     methods: {
 
         fetchPosts() {
-        axios.get('http://localhost:3001/api/products')
+        axios.get('http://localhost:3001/api/dosen')
             .then(response => {
                 this.posts = response.data;
+                console.log(response.data);
             })
             .catch(error => {
                 console.log(error);
@@ -229,28 +229,24 @@ export default {
 
         submitForm() {
             // Check if all fields are filled
-            if (this.newPost.nama === '' || this.newPost.nim === 0 || this.newPost.alamat === '' || this.newPost.email === '') {
+            if (this.newPost.Nama === '' || this.newPost.NIY === 0 || this.newPost.Alamat === '' || this.newPost.Jabatan === '') {
                 alert('Data tdak boleh kosong');
                 return;
             }
 
-            // Check if email is valid
-            if (!this.validateEmail(this.newPost.email)) {
-                alert('Email tidak valid');
-                return;
-            }
+
 
 
             // Send a POST request to add the new post to the server
-            axios.post('http://localhost:3001/api/products', this.newPost)
+            axios.post('http://localhost:3001/api/dosen', this.newPost)
                 .then(response => {
                     this.posts.push(response.data);
                     console.log(response.data);
                     // Clear the form fields
-                    this.nama = '';
-                    this.nim = '';
-                    this.alamat = '';
-                    this.email = '';
+                    this.Nama = '';
+                    this.NIY = '';
+                    this.Alamat = '';
+                    this.Jabatan = '';
                     this.success();
                     // Close the dialog
                     this.visible = false;
@@ -262,11 +258,7 @@ export default {
                 });
         },
 
-        validateEmail(email) {
-            // Regular expression to validate email format
-            const re = /\S+@\S+\.\S+/;
-            return re.test(email);
-        },
+
 
 
         editPost(post) {
@@ -275,7 +267,7 @@ export default {
         },
 
         updatePost() {
-            axios.put(`http://localhost:3001/api/products/${this.selectedPost.nim}`, this.selectedPost)
+            axios.put(`http://localhost:3001/api/dosen/${this.selectedPost.NIY}`, this.selectedPost)
                 .then(response => {
                     const updatedPost = response.data;
                     const index = this.posts.findIndex(post => post.id === updatedPost.id);
@@ -304,15 +296,15 @@ export default {
         },
 
         deleteConfirmed() {
-            axios.delete(`http://localhost:3001/api/products/${this.selectedPost.nim}`, this.selectedPost)
+            axios.delete(`http://localhost:3001/api/dosen/${this.selectedPost.NIY}`, this.selectedPost)
                 .then(() => {
                     console.log('Post deleted successfully!');
                     this.del()
                 })
         },
 
-    },
 
+    },
 
 };
 </script>
