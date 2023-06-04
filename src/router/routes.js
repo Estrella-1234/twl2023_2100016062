@@ -11,9 +11,9 @@ export default [
                 component: () => import('../pages/dashboard'),
             },
             {
-                name:'user',
-                path: '/user',
-                component: () => import('../pages/user'),
+                name:'Mahasiswa',
+                path: '/Mahasiswa',
+                component: () => import('../pages/Mahasiswa'),
             },
             {
                 name:'product',
