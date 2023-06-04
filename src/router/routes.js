@@ -16,9 +16,9 @@ export default [
                 component: () => import('../pages/Mahasiswa'),
             },
             {
-                name:'product',
-                path: '/product',
-                component: () => import('../pages/product'),
+                name:'Dosen',
+                path: '/Dosen',
+                component: () => import('../pages/Dosen'),
             },
             {
                 name:'customer',

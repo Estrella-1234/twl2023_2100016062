@@ -1,7 +1,7 @@
 <template >
     <div class="justify-content-center text-left pl-8 pb-3">
         <Toast></Toast>
-        <div class="pt-8">
+        <div class="pt-3">
             <Button @click="visible = true" label="Tambah Data" class="text-center" icon="pi pi-user-plus"
                 severity="success" />
         </div>

@@ -1,7 +1,6 @@
 <template>
     <div>
-        <h3 class="font-serif font-semibold text-3xl pt-4">Data Dosen</h3>
-
+        <h3 class="font-serif font-semibold text-3xl pt-5 ">Data Dosen</h3>
         <!-- Pop Up Form Input-->
         <div class="justify-content-center text-left pl-8 pb-7">
             <Button label="Tambah Data" class="text-center" icon="pi pi-user-plus" @click="visible = true" />
@@ -50,7 +49,7 @@
                         <th class="border border-black w-1/2">Nama</th>
                         <th class="border border-black w-1/2">Alamat</th>
                         <th class="border border-black w-1/6">Jabatan</th>
-                        <th class="border border-black w-1/8">Edit</th>
+                        <th class="border border-black w-1/8">Action</th>
                     </tr>
                 </thead>
                 <tbody>

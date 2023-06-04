@@ -21,8 +21,8 @@
             <span v-show="dataOpenSideBar">Mahasiswa</span></router-link>
         </div>
         <div class="   py-3 rounded-md cursor-pointer  text-gray-300 hover:text-white">
-          <router-link to="/product" class="px-2 flex space-x-2"><span class="pi pi-user "
-              v-tooltip.right="'Product'"></span> <span v-show="dataOpenSideBar">Dosen</span></router-link>
+          <router-link to="/Dosen" class="px-2 flex space-x-2"><span class="pi pi-user "
+              v-tooltip.right="'Dosen'"></span> <span v-show="dataOpenSideBar">Dosen</span></router-link>
         </div>
         <div class="  py-3 rounded-md cursor-pointer text-gray-300 hover:text-white">
           <router-link to="/contact" class="px-2 flex space-x-2"><span class="pi pi-whatsapp  "
