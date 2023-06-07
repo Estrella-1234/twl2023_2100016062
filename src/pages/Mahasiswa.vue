@@ -1,5 +1,4 @@
 <template>
-
     <h3 class="font-serif font-semibold text-3xl pt-5 ">Data Mahasiswa</h3>
     <div class="">
         <uploadProfile @update-data="handleDataUpdate, showToast"></uploadProfile>
@@ -32,7 +31,9 @@
                         <td class="border border-black py-2 px-2 text-center">
                             <div class="flex justify-center space-x-2">
                                 <editProfile></editProfile>
-                                <!-- <Button label="" class="" icon="pi pi-user-edit" severity="warning" /> -->
+
+
+                                
                                 <Button label="" @click="visible = true" class="bg-red-500 text-white"
                                     icon="pi pi-user-minus" severity="danger" />
                                 <Dialog v-model:visible="visible" modal header="Hapus Data" :style="{ width: '400px' }">
@@ -104,6 +105,13 @@ export default {
                 const apiEndpoint = `http://localhost:3000/api/products/${nim}`;
                 await axios.delete(apiEndpoint);
                 this.fetchData(); // Trigger the fetch function to update the data after deletion
+                
+                this.toast.add({
+                    severity: 'success',
+                    summary: 'Success Message',
+                    detail: 'Data Berhasil Dihapus',
+                    life: 3000,
+                });
             } catch (error) {
                 console.log(error);
             }
@@ -115,9 +123,9 @@ export default {
             const toast = this.$toast;
             toast.add({
                 severity: 'success',
-                summary: 'Success Message',
-                detail: 'Message Content',
-                life: 3000,
+                summary: 'Alert',
+                detail: 'Data Berhasil Dihapus',
+                life: 5000,
             });
         },
 
@@ -131,12 +139,13 @@ export default {
             try {
                 const response = await axios.get('http://localhost:3000/api/products');
                 this.mahasiswas = response.data;
-                console.log(this.$toast);
+                console.log(this.mahasiswas.a);
 
                 // Menambahkan base url pada imageName
                 this.mahasiswas.forEach(mahasiswa => {
-                    mahasiswa.imageName = 'http://localhost:3000/Images/Profiles/' + mahasiswa.imageName;
+                    mahasiswa.imageName = 'http://localhost:3000/Images/Profiles/' + mahasiswa.imagePath;
                 });
+
             } catch (error) {
                 console.log(error);
             }
