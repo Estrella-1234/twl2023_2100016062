@@ -28,7 +28,7 @@
 
     </div>
 
-    <button class="bg-green-600 hover:bg-green-800 text-white font-bold py-2 px-4 mt-8 rounded">Hubungi Kami</button>
+    <!-- <button class="bg-green-600 hover:bg-green-800 text-white font-bold py-2 px-4 mt-8 rounded">Hubungi Kami</button> -->
   </div>
 </template>
 
