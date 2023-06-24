@@ -3,8 +3,7 @@
         <h3 class="font-serif font-semibold text-3xl pt-5 ">Data Dosen</h3>
         <!-- Pop Up Form Input-->
         <div class="justify-content-center text-left pl-8 pb-7">
-            <Button label="Tambah Data" class="text-center" icon="pi pi-user-plus" @click="visible = true"
-                severity="success" />
+            <Button label="Tambah Data" class="text-center" icon="pi pi-user-plus" @click="visible = true" severity="success"/>
             <Dialog v-model:visible="visible" modal header="Form Data Dosen" :style="{ width: '50vw' }">
                 <div class="p-4 bg-white rounded-lg shadow-md">
 
@@ -17,17 +16,17 @@
 
                         <div class="mb-4">
                             <label for="Nama" class="block font-semibold mb-2">Nama:</label>
-                            <InputText id="Nama" v-model="newPost.nama" class="w-full" />
+                            <InputText id="Nama" v-model="newPost.Nama" class="w-full" />
                         </div>
 
                         <div class="mb-4">
                             <label for="Alamat" class="block font-semibold mb-2">Alamat:</label>
-                            <InputText id="Alamat" v-model="newPost.alamat" class="w-full" />
+                            <InputText id="Alamat" v-model="newPost.Alamat" class="w-full" />
                         </div>
 
                         <div class="mb-4">
                             <label for="Jabatan" class="block font-semibold mb-2">Jabatan:</label>
-                            <InputText id="Jabatan" v-model="newPost.jabatan" class="w-full" />
+                            <InputText id="Jabatan" v-model="newPost.Jabatan" class="w-full" />
 
                         </div>
                         <div class="text-center">
@@ -56,9 +55,9 @@
                 <tbody>
                     <tr v-for="(post,index) in posts" :key="post.NIY">
                         <td class="border border-black py-2 px-2 text-center">{{ post.NIY }} </td>
-                        <td class="border border-black py-2 px-2 text-left">{{ post.nama }}</td>
-                        <td class="border border-black py-2 px-2 text-left">{{ post.alamat }}</td>
-                        <td class="border border-black py-2 px-2 text-left">{{ post.jabatan }}</td>
+                        <td class="border border-black py-2 px-2 text-left">{{ post.Nama }}</td>
+                        <td class="border border-black py-2 px-2 text-left">{{ post.Alamat }}</td>
+                        <td class="border border-black py-2 px-2 text-left">{{ post.Jabatan }}</td>
                         <td class="border border-black py-2 px-2">
 
                             <!-- Edit Data -->
@@ -71,7 +70,7 @@
                                         <form @submit.prevent="updatePost()">
                                             <div class="mb-4">
                                                 <label for="Nama" class="block font-semibold mb-2">Nama: </label>
-                                                <InputText id="Nama" v-model="selectedPost.nama" class="w-full" />
+                                                <InputText id="Nama" v-model="selectedPost.Nama" class="w-full" />
                                             </div>
                                             <div class="mb-4">
                                                 <label for="NIY" class="block font-semibold mb-2">NIY:</label>
@@ -80,11 +79,11 @@
                                             </div>
                                             <div class="mb-4">
                                                 <label for="Alamat" class="block font-semibold mb-2">Alamat:</label>
-                                                <InputText id="Alamat" v-model="selectedPost.alamat" class="w-full" />
+                                                <InputText id="Alamat" v-model="selectedPost.Alamat" class="w-full" />
                                             </div>
                                             <div class="mb-4">
                                                 <label for="Jabatan" class="block font-semibold mb-2">Jabatan:</label>
-                                                <InputText id="Jabatan" v-model="selectedPost.jabatan" class="w-full" />
+                                                <InputText id="Jabatan" v-model="selectedPost.Jabatan" class="w-full" />
                                             </div>
                                             <div class="text-center">
                                                 <Button label="Update" type="submit"
@@ -179,7 +178,7 @@ export default {
             toast.add({ severity: 'error', summary: 'Delete Message', detail: 'Data Berhasil Dihapus', life: 3000 });
         };
 
-
+        
 
 
         return {
@@ -199,15 +198,15 @@ export default {
             posts: [],
             showForm: false,
             id: '',
-            nama: '',
-            NIY: null,
-            alamat: '',
-            jabatan: '',
+            Nama: '',
+            NIY: 0,
+            Alamat: '',
+            Jabatan: '',
             newPost: {
-                nama: "",
-                NIY: null,
-                alamat: "",
-                jabatan: "",
+                Nama: "",
+                NIY: 0,
+                Alamat: "",
+                Jabatan: "",
             },
             selectedPost: null,
         }
@@ -216,71 +215,52 @@ export default {
     methods: {
 
         fetchPosts() {
-            // Retrieve the token from localStorage
-            const token = localStorage.getItem('token');
+        axios.get('http://localhost:3001/api/dosen')
+            .then(response => {
+                this.posts = response.data;
+                console.log(response.data);
+            })
+            .catch(error => {
+                console.log(error);
+            })
+    },
 
-            // Include the token in the Authorization header
-            const config = {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            };
 
-            axios
-                .get('http://localhost:3008/dosen', config)
-                .then((response) => {
-                    this.posts = response.data;
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        },
 
         submitForm() {
-            // Retrieve the token from localStorage
-            const token = localStorage.getItem('token');
-
-            // Include the token in the Authorization header
-            const config = {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            };
-
             // Check if all fields are filled
-            if (
-                this.newPost.nama === '' ||
-                this.newPost.NIY === 0 ||
-                this.newPost.alamat === '' ||
-                this.newPost.jabatan === ''
-            ) {
-                alert('Data tidak boleh kosong');
+            if (this.newPost.Nama === '' || this.newPost.NIY === 0 || this.newPost.Alamat === '' || this.newPost.Jabatan === '') {
+                alert('Data tdak boleh kosong');
                 return;
             }
 
+
+
+
             // Send a POST request to add the new post to the server
-            axios
-                .post('http://localhost:3008/dosen', this.newPost, config)
-                .then((response) => {
+            axios.post('http://localhost:3001/api/dosen', this.newPost)
+                .then(response => {
                     this.posts.push(response.data);
+                    console.log(response.data);
                     // Clear the form fields
-                    this.newPost.nama = '';
-                    this.newPost.NIY = null;
-                    this.newPost.alamat = '';
-                    this.newPost.jabatan = '';
+                    this.Nama = '';
+                    this.NIY = '';
+                    this.Alamat = '';
+                    this.Jabatan = '';
                     this.success();
                     // Close the dialog
                     this.visible = false;
                     // Refresh fetch posts
                     this.fetchPosts();
                 })
-                .catch((error) => {
+                .catch(error => {
                     console.log(error);
                 });
         },
 
 
 
+<<<<<<< HEAD
         showDeleteConfirmation(index) {
             this.deletingIndex = index;
             this.visible = true;
@@ -288,22 +268,17 @@ export default {
         showEditDialog(index) {
             this.selectedMahasiswa = { ...this.mahasiswas[index] };
             this.editvisible[index] = true;
+=======
+
+        editPost(post) {
+            this.visible1 = true;
+            this.selectedPost = { ...post };
+>>>>>>> parent of 3959df1 (Dosen Update)
         },
 
         updatePost() {
-            // Retrieve the token from localStorage
-            const token = localStorage.getItem('token');
-
-            // Include the token in the Authorization header
-            const config = {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            };
-
-            axios
-                .put(`http://localhost:3008/dosen/${this.selectedPost._id}`, this.selectedPost, config)
-                .then((response) => {
+            axios.put(`http://localhost:3001/api/dosen/${this.selectedPost.NIY}`, this.selectedPost)
+                .then(response => {
                     const updatedPost = response.data;
                     const index = this.posts.findIndex(post => post.id === updatedPost.id);
 
@@ -312,10 +287,9 @@ export default {
                     this.change();
                     // Refresh fetch posts
                     this.fetchPosts();
+
                 })
-                .catch((error) => {
-                    console.log(error);
-                });
+
         },
 
         deletePost(post) {
@@ -332,21 +306,10 @@ export default {
         },
 
         deleteConfirmed() {
-            // Retrieve the token from localStorage
-            const token = localStorage.getItem('token');
-
-            // Include the token in the Authorization header
-            const config = {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            };
-            axios.delete(`http://localhost:3008/dosen/${this.selectedPost._id}`, config)
+            axios.delete(`http://localhost:3001/api/dosen/${this.selectedPost.NIY}`, this.selectedPost)
                 .then(() => {
                     console.log('Post deleted successfully!');
                     this.del()
-                    // Refresh fetch posts
-                    this.fetchPosts();
                 })
         },
 
