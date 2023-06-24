@@ -43,7 +43,6 @@ export default {
         };
     },
     methods: {
-        // ...
         async loginUser() {
             try {
                 const response = await axios.post('http://localhost:3008/login', {
@@ -66,6 +65,10 @@ export default {
                 console.error(error);
             }
         },
+        switchToRegistration() {
+            this.$emit('switch-mode', 'registration');
+        },
+        
     },
 };
 

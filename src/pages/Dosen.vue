@@ -54,7 +54,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="post in posts" :key="post.NIY">
+                    <tr v-for="(post,index) in posts" :key="post.NIY">
                         <td class="border border-black py-2 px-2 text-center">{{ post.NIY }} </td>
                         <td class="border border-black py-2 px-2 text-left">{{ post.nama }}</td>
                         <td class="border border-black py-2 px-2 text-left">{{ post.alamat }}</td>
@@ -64,8 +64,8 @@
                             <!-- Edit Data -->
                             <div class="flex justify-center space-x-2">
                                 <Button class="mr-10" icon="pi pi-user-edit" severity="success" text raised
-                                    aria-label="Edit" @click="editPost(post)" />
-                                <Dialog v-model:visible="visible1" modal header="Edit Data Mahasiswa"
+                                    aria-label="Edit" @click="editvisible[index] = true" />
+                                <Dialog v-model:visible="editvisible[index]" modal header="Edit Data Mahasiswa"
                                     :style="{ width: '50vw' }">
                                     <div>
                                         <form @submit.prevent="updatePost()">
@@ -194,6 +194,7 @@ export default {
 
     data() {
         return {
+            editvisible: [],
             visible2: false,
             posts: [],
             showForm: false,
@@ -280,9 +281,13 @@ export default {
 
 
 
-        editPost(post) {
-            this.visible1 = true;
-            this.selectedPost = { ...post };
+        showDeleteConfirmation(index) {
+            this.deletingIndex = index;
+            this.visible = true;
+        },
+        showEditDialog(index) {
+            this.selectedMahasiswa = { ...this.mahasiswas[index] };
+            this.editvisible[index] = true;
         },
 
         updatePost() {

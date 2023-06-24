@@ -176,16 +176,12 @@ export default {
         },
         
         updateData() {
-            // Perform the update operation using the selectedMahasiswa data
-            // ...
-
-            // Emit an event to update the data in the parent component
+            
             this.$emit('update-data');
             this.showToast('success', 'Success Message', 'Data Berhasil Diperbarui');
         },
     },
 };
 </script>
-  
+
 <style></style>
-  
