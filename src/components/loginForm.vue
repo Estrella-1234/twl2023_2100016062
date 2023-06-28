@@ -25,14 +25,17 @@
                     type="submit">
                     Log In
                 </button>
+
             </div>
         </form>
     </div>
+
 </template>
 
 
 <script>
 import axios from 'axios';
+import { useToast } from "primevue/usetoast";
 
 export default {
     name: 'LoginForm',
@@ -40,6 +43,20 @@ export default {
         return {
             username: '',
             password: '',
+        };
+    },
+    setup() {
+        const toast = useToast();
+        const success = () => {
+            toast.add({ severity: 'success', summary: 'Success Message', detail: 'Login Sucessfull', life: 5000 });
+        };
+        const failed = (Message) => {
+            toast.add({ severity: 'error', summary: 'Login Failed', detail: Message, life: 5000 });
+        };
+
+        return { 
+            success,
+            failed
         };
     },
     methods: {
@@ -51,7 +68,8 @@ export default {
                 });
 
                 // Handle the response based on your application's logic
-                console.log(response.data); // Log the response or perform any other actions
+                //Add Toast
+                this.success();
 
                 // Save the token to localStorage
                 const token = response.data.token;
@@ -60,11 +78,16 @@ export default {
                 // Reset the form fields
                 this.username = '';
                 this.password = '';
+
+
+
             } catch (error) {
                 // Handle the error
-                console.error(error);
+                const errorMessage = error.response.data.message;
+                this.failed(errorMessage);
             }
         },
+
         switchToRegistration() {
             this.$emit('switch-mode', 'registration');
         },

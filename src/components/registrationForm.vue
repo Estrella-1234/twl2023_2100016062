@@ -12,7 +12,7 @@
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="email">Email</label>
                 <input v-model="registrationData.email"
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="email" type="email" placeholder="Enter your email">
+                    id="email" type="text" placeholder="Enter your email">
             </div>
             <div class="mb-4">
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="username">Username</label>
@@ -40,6 +40,7 @@
   
 <script>
 import axios from 'axios';
+import { useToast } from "primevue/usetoast";
 
 export default {
     name: 'RegistrationForm',
@@ -53,24 +54,68 @@ export default {
             },
         };
     },
+
+    setup() {
+        const toast = useToast();
+        const success = (Message) => {
+            toast.add({ severity: 'success', summary: 'Success Message', detail: Message, life: 5000 });
+        };
+        const failed = (Message) => {
+            toast.add({ severity: 'error', summary: 'Login Failed', detail: Message, life: 5000 });
+        };
+
+        return {
+            success,
+            failed
+        };
+    },
+
     methods: {
         switchToLogin() {
             this.$emit('switch-mode', 'login');
         },
         register() {
+            // Write if statement to check if the registration data is valid
+            // If the data is invalid, show a toast message and return early
+            if (this.registrationData.fullname == '' || this.registrationData.email == '' || this.registrationData.username == '' || this.registrationData.password == '') {
+                this.failed('Mohon isi semua data');
+                return;
+            }
+            if (!this.registrationData.email.includes('@') || !this.registrationData.email.includes('.')) {
+                this.failed('Email tidak valid');
+                return;
+            }
+            if (this.registrationData.password.length < 8) {
+                this.failed('Password harus lebih dari 8 karakter');
+                return;
+            }
+            // if (!this.registrationData.password.match(/[0-9]/g)) {
+            //     this.failed('Password harus mengandung angka');
+            //     return;
+            // }
+            // if (!this.registrationData.password.match(/[!@#$%^&*()_+=[\]{};':"\\|,.<>/?]/g)) {
+            //     this.failed('Password harus mengandung simbol');
+            //     return;
+            // }
+
+
+
+
             axios.post('http://localhost:3008/register', this.registrationData)
                 .then(response => {
                     // Handle the successful registration response
-                    console.log(response.data);
+                    this.success(response.data.message);
                 })
                 .catch(error => {
                     // Handle the registration error
-                    console.error(error);
+                    this.failed(error.response.data.message);
                 });
         },
     },
 };
 </script>
   
-<style>/* No custom styles needed for this component */</style>
+<style>
+/* No custom styles needed for this component */
+</style>
   
