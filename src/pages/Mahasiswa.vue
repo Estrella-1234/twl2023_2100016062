@@ -1,84 +1,86 @@
 <template>
-    <h3 class="font-serif font-semibold text-3xl pt-5">Data Mahasiswa</h3>
-    <div class="">
-        <uploadProfile @update-data="handleDataUpdate"></uploadProfile>
-    </div>
-    <div class="pl-8 pr-8">
-        <div class="overflow-x-auto">
-            <table class="border border-collapse border-black table-auto">
-                <thead>
-                    <tr class="bg-slate-600 text-white m-5">
-                        <!-- <th class="border border-black w-1/6 pt-2 pb-2">Foto</th> -->
-                        <th class="border border-black w-1/8  pt-2 pb-2">NIM</th>
-                        <th class="border border-black w-1/2">Nama</th>
-                        <th class="border border-black w-1/6">Email</th>
-                        <th class="border border-black w-1/2">Alamat</th>
-                        <th class="border border-black w-1/2">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="(mahasiswa, index) in mahasiswas" :key="mahasiswa._id">
-                        <!-- <td class="border border-black py-2 px-2">
+    <div>
+        <h3 class="font-serif font-semibold text-3xl pt-5">Data Mahasiswa</h3>
+        <div class="">
+            <uploadProfile @update-data="handleDataUpdate"></uploadProfile>
+        </div>
+        <div class="pl-8 pr-8">
+            <div class="overflow-x-auto">
+                <table class="border border-collapse border-black table-auto bg-white">
+                    <thead>
+                        <tr class="bg-slate-600 text-white m-5">
+                            <!-- <th class="border border-black w-1/6 pt-2 pb-2">Foto</th> -->
+                            <th class="border border-black w-1/8  pt-2 pb-2">NIM</th>
+                            <th class="border border-black w-1/2">Nama</th>
+                            <th class="border border-black w-1/6">Email</th>
+                            <th class="border border-black w-1/2">Alamat</th>
+                            <th class="border border-black w-1/2">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(mahasiswa, index) in mahasiswas" :key="mahasiswa._id">
+                            <!-- <td class="border border-black py-2 px-2">
                             <div class="flex justify-center items-center h-full">
                                 <img :src="mahasiswa.imageName" class="rounded-full object-contain h-20 w-20 block"
                                     id="foto" alt="foto" />
                             </div>
                         </td> -->
-                        <td class="border border-black py-2 px-2 text-center">{{ mahasiswa.NIM }}</td>
-                        <td class="border border-black py-2 px-2 text-left">{{ mahasiswa.Nama }}</td>
-                        <td class="border border-black py-2 px-2 text-left">{{ mahasiswa.email }}</td>
-                        <td class="border border-black py-2 px-2 text-left">{{ mahasiswa.alamat }}</td>
-                        <td class="border border-black py-2 px-2 text-center">
-                            <div class="flex justify-center space-x-2">
-                                <Button label="" class="bg-yellow-500 text-white" icon="pi pi-user-edit"
-                                    @click="showEditDialog(index)" text raised outlined/>
-                                <Button label="" @click="showDeleteConfirmation(index)" class="bg-red-500 text-white"
-                                    icon="pi pi-user-minus" severity="danger" text raised outlined />
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <Dialog v-model:visible="editingDialogVisible" modal header="Edit Data" :style="{ width: '50vw' }">
-                <form @submit.prevent="updateData">
-                    <div class="mb-4">
-                        <label for="nim" class="block font-semibold mb-2">NIM:</label>
-                        <InputNumber placeholder="2100000000" v-model="selectedMahasiswa.NIM" inputId="withoutgrouping"
-                            :useGrouping="false" class="w-full" id="nim" />
-                    </div>
-                    <div class="mb-4">
-                        <label for="nama" class="block font-semibold mb-2">Nama:</label>
-                        <InputText id="nama" v-model="selectedMahasiswa.Nama" class="w-full" />
-                    </div>
-                    <div class="mb-4">
-                        <label for="email" class="block font-semibold mb-2">Email:</label>
-                        <InputText placeholder="example@gmail.com" id="email" v-model="selectedMahasiswa.email"
-                            class="w-full" />
-                    </div>
-                    <div class="mb-4">
-                        <label for="alamat" class="block font-semibold mb-2">Alamat:</label>
-                        <InputText id="alamat" v-model="selectedMahasiswa.alamat" class="w-full" />
-                    </div>
-                    <div class="text-center">
-                        <Button label="Update" type="submit"
-                            class="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 rounded select-none"
-                            severity="success" />
-                    </div>
-                </form>
-            </Dialog>
+                            <td class="border border-black py-2 px-2 text-center">{{ mahasiswa.NIM }}</td>
+                            <td class="border border-black py-2 px-2 text-left">{{ mahasiswa.Nama }}</td>
+                            <td class="border border-black py-2 px-2 text-left">{{ mahasiswa.email }}</td>
+                            <td class="border border-black py-2 px-2 text-left">{{ mahasiswa.alamat }}</td>
+                            <td class="border border-black py-2 px-2 text-center">
+                                <div class="flex justify-center space-x-2">
+                                    <Button label="" class="bg-yellow-500 text-white" icon="pi pi-user-edit"
+                                        @click="showEditDialog(index)" text raised outlined />
+                                    <Button label="" @click="showDeleteConfirmation(index)" class="bg-red-500 text-white"
+                                        icon="pi pi-user-minus" severity="danger" text raised outlined />
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <Dialog v-model:visible="editingDialogVisible" modal header="Edit Data" :style="{ width: '50vw' }">
+                    <form @submit.prevent="updateData">
+                        <div class="mb-4">
+                            <label for="nim" class="block font-semibold mb-2">NIM:</label>
+                            <InputNumber placeholder="2100000000" v-model="selectedMahasiswa.NIM" inputId="withoutgrouping"
+                                :useGrouping="false" class="w-full" id="nim" />
+                        </div>
+                        <div class="mb-4">
+                            <label for="nama" class="block font-semibold mb-2">Nama:</label>
+                            <InputText id="nama" v-model="selectedMahasiswa.Nama" class="w-full" />
+                        </div>
+                        <div class="mb-4">
+                            <label for="email" class="block font-semibold mb-2">Email:</label>
+                            <InputText placeholder="example@gmail.com" id="email" v-model="selectedMahasiswa.email"
+                                class="w-full" />
+                        </div>
+                        <div class="mb-4">
+                            <label for="alamat" class="block font-semibold mb-2">Alamat:</label>
+                            <InputText id="alamat" v-model="selectedMahasiswa.alamat" class="w-full" />
+                        </div>
+                        <div class="text-center">
+                            <Button label="Update" type="submit"
+                                class="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 rounded select-none"
+                                severity="success" />
+                        </div>
+                    </form>
+                </Dialog>
 
-            <Dialog v-model:visible="visible" modal header="Hapus Data" :style="{ width: '400px' }">
-                <p>Are you sure you want to delete this data?</p>
-                <div class="flex justify-end space-x-4 pt-6">
-                    <Button label="Cancel" class="p-button-text text-gray-500" @click="visible = false" />
-                    <Button label="Delete" class="p-button-danger" @click="deletePost" />
-                </div>
-            </Dialog>
+                <Dialog v-model:visible="visible" modal header="Hapus Data" :style="{ width: '400px' }">
+                    <p>Are you sure you want to delete this data?</p>
+                    <div class="flex justify-end space-x-4 pt-6">
+                        <Button label="Cancel" class="p-button-text text-gray-500" @click="visible = false" />
+                        <Button label="Delete" class="p-button-danger" @click="deletePost" />
+                    </div>
+                </Dialog>
 
+            </div>
         </div>
     </div>
 </template>
-  
+
 <script>
 import axios from 'axios';
 import uploadProfile from '../components/uploadProfile.vue';
@@ -209,8 +211,22 @@ export default {
             this.editingDialogVisible = true;
         },
 
+        validateEmail(email) {
+            // Regular expression to validate email format
+            const re = /\S+@\S+\.\S+/;
+            return re.test(email);
+        },
 
         async updateData() {
+            if (!this.NIM || !this.Nama || !this.email || !this.alamat) {
+                this.warn('Data tidak boleh kosong', 'Alert Message');
+                return;
+            }
+
+            if (!this.validateEmail(this.email)) {
+                this.warn('Email tidak valid', 'Alert Message');
+                return;
+            }
             try {
                 const token = localStorage.getItem('token');
                 const config = {

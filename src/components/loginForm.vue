@@ -96,6 +96,7 @@ export default {
 
 </script>
 
-<style>
-/* No custom styles needed for this component */
+<style >
+/* write code to change backround with image in local */
+
 </style>

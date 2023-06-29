@@ -6,7 +6,7 @@
                 severity="success" />
         </div>
         <Dialog v-model:visible="visible" @close="handleDialogClose" modal header="Upload Data" :style="{ width: '50vw' }">
-            <form @submit="uploadFile">
+            <form @submit.prevent="uploadFile">
                 <div class="mb-4">
                     <label for="NIM" class="block font-semibold mb-2">NIM:</label>
                     <!-- <input type="text" id="NIM" v-model="NIM" /> -->
@@ -147,13 +147,12 @@ export default {
                 await axios.post('http://localhost:3008/mahasiswa', data, config)
                     .then(response => {
                         this.response = response;
-                        this.success('Data berhasil ditambahkan', 'Success Message');
+                        this.success(response.data.Message, 'Success Message');
                         this.handleDialogClose();
-                        // this.fetchData();
+                        window.location.reload();
                     })
                     .catch(error => {
-                        console.log(error);
-                        this.error(error, 'Error Message');
+                        this.error(error.response.data.Message, 'Error Message');
                     });
 
 

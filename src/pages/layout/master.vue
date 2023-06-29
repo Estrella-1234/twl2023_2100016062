@@ -4,7 +4,7 @@
       <sidebar :dataOpenSideBar="openSidebar" />
       <div class="w-full h-full">
         <headerTop :dataOpenSideBar="openSidebar" :clickHambuger="toggleSidebar" />
-        <div class="w-full h-[calc(100vh-50px)] overflow-auto">
+        <div class="w-full h-[calc(100vh-50px)] overflow-auto bg">
           <router-view></router-view>
         </div>
       </div>
@@ -12,7 +12,7 @@
   </div>
   <div v-else>
     <Toast></Toast>
-    <div class="flex justify-center items-center min-h-screen bg-gray-100">
+    <div class="flex justify-center items-center min-h-screen bg">
       <div class="bg-white p-8 rounded shadow-lg">
         <template v-if="mode === 'login'">
           <LoginForm @switch-mode="switchMode"/>
@@ -67,4 +67,10 @@ export default {
 }
 </script>
 
-<style></style>
+<style scoped>
+.bg {
+  background-image: url('../../assets/Login.jpg');
+  background-size: cover;
+  background-position: center;
+}
+</style>

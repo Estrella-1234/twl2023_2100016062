@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto px-4 py-8">
+  <div class="container mx-auto px-4 py-8 ">
     <h1 class="text-2xl font-bold mb-4">Dashboard Pengelolaan Data Mahasiswa</h1>
     <p class="mb-6">Mengelola data siswa/mahasiswa menjadi lebih mudah dengan dashboard kami. Dapatkan kendali penuh atas informasi penting seperti data personal, perkembangan akademik, dan informasi lainnya dengan antarmuka yang intuitif dan mudah digunakan.</p>
 
@@ -38,5 +38,5 @@ export default {
 </script>
 
 <style>
-/* Gunakan Tailwind CSS di sini */
+
 </style>

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div> 
+        <div>
             <div>
                 <h3 class="font-serif font-semibold text-3xl pt-5 ">Data Dosen</h3>
                 <!-- Pop Up Form Input-->
@@ -45,7 +45,7 @@
         <!-- Read Data -->
         <div class="pl-8 pr-8">
             <div class="overflow-x-auto">
-                <table class="border border-collapse border-black table-auto">
+                <table class="border border-collapse border-black table-auto bg-white">
                     <thead>
                         <tr class="bg-slate-600 text-white ">
                             <th class="border border-black w-1/8 pt-2 pb-2">NIY</th>
@@ -328,6 +328,11 @@ export default {
                         Authorization: `Bearer ${token}`,
                     },
                 };
+                // Check if all fields are filled
+                if (!this.selectedPost.NIY || !this.selectedPost.nama || !this.selectedPost.alamat || !this.selectedPost.jabatan) {
+                    this.warn('Data tidak boleh kosong', 'Alert Message');
+                    return;
+                }
                 const id = this.posts[this.editingIndex]._id;
                 const apiEndpoint = `http://localhost:3008/dosen/${id}`;
                 await axios.put(apiEndpoint, this.selectedPost, config);

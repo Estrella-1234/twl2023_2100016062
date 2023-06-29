@@ -14,7 +14,7 @@
         </span>
       </div>
       <div class="flex space-x-3 items-center justify-center px-3 pr-5">
-        <div class="text-md">{{ getUsernameFromToken() }} </div>
+        <div class="text-md">{{ username }}</div>
         <Avatar icon="pi pi-prime" class="mr-2" style="background-color:#9c27b0; color: #ffffff" shape="circle"
           @click="toggle" aria-haspopup="true" aria-controls="overlay_menu" />
 
@@ -22,38 +22,55 @@
       </div>
     </div>
     <!-- Profile Dialog -->
-    <Dialog v-model:visible="showProfileDialog" header="User Profile" width="400px">
-      <div class="p-d-flex p-flex-column">
-        <div class="p-field">
-          <label for="name">Name</label>
-          <InputText id="name" v-model="userProfile.name" />
+    <Dialog v-model:visible="profileDialogVisible" modal header="User Profile" :style="{ width: '30vw' }">
+      <div class="p-4 bg-white rounded-lg shadow-md">
+        <div class="mb-4">
+          <label for="username" class="block font-semibold mb-2">Username</label>
+          <InputText id="username" v-model="userProfile.username" class="w-full" />
         </div>
-        <div class="p-field">
-          <label for="email">Email</label>
-          <InputText id="email" v-model="userProfile.email" />
+        <div class="mb-4">
+          <label for="name" class="block font-semibold mb-2">Full Name</label>
+          <InputText id="name" v-model="userProfile.name" class="w-full" />
+        </div>
+        <div class="mb-4">
+          <label for="email" class="block font-semibold mb-2">Email</label>
+          <InputText id="email" v-model="userProfile.email" class="w-full" />
         </div>
 
-        <div class="p-d-flex p-jc-end">
-          <Button label="Save" @click="saveProfile" />
+        <div class="flex justify-center mt-4 space-x-6">
+          <Button label="Save" severity="success" @click="saveProfile" />
           <Button label="Cancel" @click="cancelProfile" />
         </div>
+
       </div>
     </Dialog>
-
   </div>
 </template>
 
 <script>
 import Dialog from 'primevue/dialog';
+import Button from 'primevue/button';
+import InputText from 'primevue/inputtext';
+import axios from 'axios';
 
 export default {
+  created() {
+    this.getUsernameFromId().then(username => {
+      this.username = username;
+    }).catch(error => {
+      console.error(error);
+    });
+  },
+
   components: {
     Dialog,
+    Button,
+    InputText,
   },
 
   props: {
     dataOpenSideBar: Boolean,
-    clickHambuger: Function
+    clickHambuger: Function,
   },
   data() {
     return {
@@ -77,14 +94,17 @@ export default {
           icon: 'pi pi-lock',
         },
       ],
-      showProfileDialog: false,
+      profileDialogVisible: false,
       userProfile: {
-        fullname: '',
+        name: '',
         email: '',
-        username: '',
+        username: '', // Add username property
       },
-    }
+      username: '', // Menambahkan properti username
+    };
   },
+
+
   methods: {
     toggle(event) {
       this.$refs.menu.toggle(event);
@@ -97,21 +117,110 @@ export default {
       location.reload();
     },
 
-    getUsernameFromToken() {
+    async getUsernameFromId() {
+      const id = this.getUserIdFromToken();
+      const token = localStorage.getItem('token');
+
+      if (!token) {
+        console.error('Token not found');
+        return '';
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      try {
+        const response = await axios.get(`http://localhost:3008/user/${id}`, config);
+        const data = response.data;
+        return data.username;
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+        return '';
+      }
+    },
+
+
+    getUserIdFromToken() {
       const token = localStorage.getItem('token');
       if (token) {
         const base64Url = token.split('.')[1];
         const base64 = base64Url.replace('-', '+').replace('_', '/');
         const decodedToken = JSON.parse(window.atob(base64));
-        return decodedToken.username; // Assuming the username is stored in the token
+        return decodedToken.Id; // Assuming the user ID is stored in the token
       }
       return '';
     },
-  
-  
-  }
 
-}
+
+    showProfileDialog() {
+      // Fetch the user data from the API based on the username
+      const id = this.getUserIdFromToken();
+      const token = localStorage.getItem('token');
+      // Include the token in the Authorization header
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      axios
+        .get(`http://localhost:3008/user/${id}`, config)
+        .then((response) => {
+          const data = response.data;
+          this.userProfile.name = data.fullname;
+          this.userProfile.email = data.email;
+          this.userProfile.username = data.username; // Set the username
+          this.profileDialogVisible = true; // Open the dialog after fetching the data
+        })
+        .catch((error) => {
+          console.error('Error fetching user data:', error);
+        });
+    },
+
+    saveProfile() {
+      // Send the updated user profile to the API for saving
+      const id = this.getUserIdFromToken();
+      const updatedProfile = {
+        username: this.userProfile.username,
+        fullname: this.userProfile.name,
+        email: this.userProfile.email,
+      };
+
+      const token = localStorage.getItem('token');
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      axios.put(`http://localhost:3008/user/${id}`, updatedProfile, config)
+        .then((response) => {
+          // Handle the response or show a success message
+          console.log('User profile saved successfully:', response.data);
+
+          // update username
+          this.username = this.userProfile.username;
+
+          this.profileDialogVisible = false;
+        })
+        .catch((error) => {
+          console.error('Error saving user profile:', error);
+        });
+    },
+
+    cancelProfile() {
+      // Reset the user profile data
+      this.userProfile.name = '';
+      this.userProfile.email = '';
+      this.userProfile.username = '';
+
+      // Close the profile dialog
+      this.profileDialogVisible = false;
+    },
+  },
+};
 </script>
+
 
 <style></style>
