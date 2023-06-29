@@ -45,6 +45,7 @@ export default {
             password: '',
         };
     },
+
     setup() {
         const toast = useToast();
         const success = () => {
@@ -59,6 +60,7 @@ export default {
             failed
         };
     },
+
     methods: {
         async loginUser() {
             try {

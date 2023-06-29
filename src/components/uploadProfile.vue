@@ -1,6 +1,6 @@
 <template >
     <div class="justify-content-center text-left pl-8 pb-3">
-        <Toast></Toast>
+
         <div class="pt-3">
             <Button @click="visible = true" label="Tambah Data" class="text-center" icon="pi pi-user-plus"
                 severity="success" />
@@ -8,23 +8,22 @@
         <Dialog v-model:visible="visible" @close="handleDialogClose" modal header="Upload Data" :style="{ width: '50vw' }">
             <form @submit.prevent="uploadFile">
                 <div class="mb-4">
-                    <label for="nim" class="block font-semibold mb-2">NIM:</label>
-                    <!-- <input type="text" id="nim" v-model="nim" /> -->
-                    <InputNumber placeholder="2100000000" v-model="nim" inputId="withoutgrouping" :useGrouping="false"
-                        class="w-full" id="nim" />
+                    <label for="NIM" class="block font-semibold mb-2">NIM:</label>
+                    <!-- <input type="text" id="NIM" v-model="NIM" /> -->
+                    <InputNumber placeholder="2100000000" v-model="NIM" inputId="withoutgrouping" :useGrouping="false"
+                        class="w-full" id="NIM" />
                 </div>
 
                 <div class="mb-4">
-                    <label for="nama" class="block font-semibold mb-2">Nama:</label>
-                    <!-- <input type="text" id="nama" v-model="nama" /> -->
-                    <InputText id="nama" v-model="nama" class="w-full" />
+                    <label for="Nama" class="block font-semibold mb-2">Nama:</label>
+                    <!-- <input type="text" id="Nama" v-model="Nama" /> -->
+                    <InputText id="Nama" v-model="Nama" class="w-full" />
                 </div>
 
                 <div class="mb-4">
                     <label for="email" class="block font-semibold mb-2">Email:</label>
                     <!-- <input type="email" id="email" v-model="email" /> -->
-                    <InputText placeholder="example@gmail.com" id="email" v-model="email" class="w-full"
-                        />
+                    <InputText placeholder="example@gmail.com" id="email" v-model="email" class="w-full" />
                 </div>
 
                 <div class="mb-4">
@@ -33,10 +32,10 @@
                     <InputText id="alamat" v-model="alamat" class="w-full" />
                 </div>
 
-                <div class="mb-4">
+                <!-- <div class="mb-4">
                     <label for="image" class="block font-semibold mb-2">File:</label>
                     <input type="file" id="image" ref="fileInput" />
-                </div>
+                </div> -->
                 <div class="text-center">
                     <Button label="Submit" type="submit"
                         class="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 rounded select-none "
@@ -56,34 +55,48 @@ import { ref } from 'vue';
 import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
 import InputNumber from 'primevue/inputnumber';
-import Toast from 'primevue/toast';
 
+import { useToast } from "primevue/usetoast";
 
 export default {
     name: 'uploadProfile',
+
 
     components: {
         Button,
         Dialog,
         InputText,
         InputNumber,
-        Toast,
     },
 
     setup() {
         const visible = ref(false);
+        const toast = useToast();
+
+        const success = (Message, summary) => {
+            toast.add({ severity: 'success', summary: summary, detail: Message, life: 5000 });
+        };
+        const warn = (Message, summary) => {
+            toast.add({ severity: 'warn', summary: summary, detail: Message, life: 5000 });
+        };
+        const error = (Message, summary) => {
+            toast.add({ severity: 'error', summary: summary, detail: Message, life: 5000 });
+        };
         return {
             visible,
-
+            success,
+            warn,
+            error,
         }
     },
 
     data() {
         return {
-            nim: null,
-            nama: '',
+            NIM: null,
+            Nama: '',
             email: '',
             alamat: '',
+
 
             mahasiswas: [],
             imageName: null,
@@ -95,14 +108,6 @@ export default {
     methods: {
         // method / function untuk menutup dan mengupdate data
         handleDialogClose() {
-            const updatedData = {
-                nim: this.nim,
-                nama: this.nama,
-                email: this.email,
-                alamat: this.alamat,
-                imageName: this.imageName,
-            };
-            this.$emit('update-data', updatedData);
             this.visible = false; // Close the dialog
         },
 
@@ -114,64 +119,67 @@ export default {
 
         // method / fuction untuk mengupload file
         async uploadFile() {
-            if (!this.nim || !this.nama || !this.email || !this.alamat) {
-                alert('Data tidak boleh kosong');
+            if (!this.NIM || !this.Nama || !this.email || !this.alamat) {
+                this.warn('Data tidak boleh kosong', 'Alert Message');
                 return;
             }
 
             if (!this.validateEmail(this.email)) {
-                alert('Email tidak valid');
+                this.warn('Email tidak valid', 'Alert Message');
                 return;
             }
 
 
 
-
-            console.log('Button works');
-            const fileInput = this.$refs.fileInput;
-            const file = fileInput.files[0];
-            const formData = new FormData();
-            formData.append('image', file);
-
             try {
-                const response = await axios.post('http://localhost:3000/api/upload', formData, {
+                // Retrieve the token from localStorage
+                const token = localStorage.getItem('token');
+
+                // Include the token in the Authorization header
+                const config = {
                     headers: {
-                        'Content-Type': 'multipart/form-data'
-                    }
-                });
-                const imageName = response.data.path;
+                        Authorization: `Bearer ${token}`,
+                    },
+                };
 
-                const { nim, nama, email, alamat } = this;
-                const data = { nim, nama, email, alamat, imageName };
+                const { NIM, Nama, email, alamat } = this;
+                const data = { NIM, Nama, email, alamat };
 
-                // console.log(data); // menampilkan data produk di console
+                console.log(data); // menampilkan data produk di console
 
-                await axios.post('http://localhost:3000/api/products', data)
+                await axios.post('http://localhost:3008/mahasiswa', data, config)
                     .then(response => {
                         this.response = response;
-                        console.log(response);
+                        this.success('Data berhasil ditambahkan', 'Success Message');
+                        this.handleDialogClose();
                     })
                     .catch(error => {
                         console.log(error);
+                        this.error(error, 'Error Message');
                     });
 
-                alert('Data berhasil ditambahkan');
-                this.handleDialogClose();
+
             } catch (error) {
                 console.log(error);
             }
         },
 
         async fetchData() {
+            // Retrieve the token from localStorage
+            const token = localStorage.getItem('token');
+
+            // Include the token in the Authorization header
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            };
             try {
-                const response = await axios.get('http://localhost:3000/api/products');
+                const response = await axios.get('http://localhost:3008/mahasiswa', config);
                 this.mahasiswas = response.data;
                 console.log(this.mahasiswas);
 
-                // Menambahkan base url pada imageName
-                this.mahasiswas.forEach(mahasiswa => {
-                    mahasiswa.imageName = 'http://localhost:3000/Images/Profiles/' + mahasiswa.imageName;
-                });
+
             } catch (error) {
                 console.log(error);
             }

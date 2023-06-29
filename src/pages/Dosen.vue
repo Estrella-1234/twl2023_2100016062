@@ -169,14 +169,14 @@ export default {
         const visible1 = ref(false);
 
         const toast = useToast();
-        const success = () => {
-            toast.add({ severity: 'success', summary: 'Success Message', detail: 'Data Berhasil Disimpan', life: 3000 });
+        const success = (Message, summary) => {
+            toast.add({ severity: 'success', summary: summary, detail: Message, life: 5000 });
         };
-        const change = () => {
-            toast.add({ severity: 'success', summary: 'Success Message', detail: 'Data Berhasil Diubah', life: 3000 });
+        const warn = (Message, summary) => {
+            toast.add({ severity: 'warn', summary: summary, detail: Message, life: 5000 });
         };
-        const del = () => {
-            toast.add({ severity: 'error', summary: 'Delete Message', detail: 'Data Berhasil Dihapus', life: 3000 });
+        const error = (Message, summary) => {
+            toast.add({ severity: 'error', summary: summary, detail: Message, life: 5000 });
         };
 
 
@@ -186,8 +186,8 @@ export default {
             visible,
             visible1,
             success,
-            change,
-            del,
+            warn,
+            error,
         };
     },
 
@@ -236,6 +236,12 @@ export default {
                 });
         },
 
+        validateEmail(email) {
+            // Regular expression to validate email format
+            const re = /\S+@\S+\.\S+/;
+            return re.test(email);
+        },
+
         submitForm() {
             // Retrieve the token from localStorage
             const token = localStorage.getItem('token');
@@ -248,13 +254,13 @@ export default {
             };
 
             // Check if all fields are filled
-            if (
-                this.newPost.nama === '' ||
-                this.newPost.NIY === 0 ||
-                this.newPost.alamat === '' ||
-                this.newPost.jabatan === ''
-            ) {
-                alert('Data tidak boleh kosong');
+            if (!this.NIM || !this.Nama || !this.email || !this.alamat) {
+                this.warn('Data tidak boleh kosong', 'Alert Message');
+                return;
+            }
+
+            if (!this.validateEmail(this.email)) {
+                this.warn('Email tidak valid', 'Alert Message');
                 return;
             }
 
@@ -268,7 +274,8 @@ export default {
                     this.newPost.NIY = null;
                     this.newPost.alamat = '';
                     this.newPost.jabatan = '';
-                    this.success();
+
+                    this.success('Data berhasil ditambahkan', 'Success Message');
                     // Close the dialog
                     this.visible = false;
                     // Refresh fetch posts
@@ -276,6 +283,7 @@ export default {
                 })
                 .catch((error) => {
                     console.log(error);
+                    this.error('Data gagal ditambahkan '+ error.data.Message, 'Error Message');
                 });
         },
 
@@ -310,11 +318,14 @@ export default {
                     this.posts.splice(index, 1, updatedPost);
                     this.visible1 = false;
                     this.change();
+
+                    this.success('Data berhasil diubah', 'Success Message');
                     // Refresh fetch posts
                     this.fetchPosts();
                 })
                 .catch((error) => {
                     console.log(error);
+                    this.error('Data gagal diubah '+ error.data.Message, 'Error Message');
                 });
         },
 
@@ -344,10 +355,14 @@ export default {
             axios.delete(`http://localhost:3008/dosen/${this.selectedPost._id}`, config)
                 .then(() => {
                     console.log('Post deleted successfully!');
-                    this.del()
+                    this.success('Data berhasil dihapus', 'Success Message');
                     // Refresh fetch posts
                     this.fetchPosts();
                 })
+                .catch((error) => {
+                    console.log(error);
+                    this.error('Data gagal dihapus '+ error.data.Message, 'Error Message');
+                });
         },
 
 

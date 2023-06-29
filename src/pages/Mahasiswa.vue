@@ -8,7 +8,7 @@
             <table class="border border-collapse border-black table-auto">
                 <thead>
                     <tr class="bg-slate-600 text-white m-5">
-                        <th class="border border-black w-1/6 pt-2 pb-2">Foto</th>
+                        <!-- <th class="border border-black w-1/6 pt-2 pb-2">Foto</th> -->
                         <th class="border border-black w-1/8">NIM</th>
                         <th class="border border-black w-1/2">Nama</th>
                         <th class="border border-black w-1/6">Email</th>
@@ -17,53 +17,21 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(mahasiswa, index) in mahasiswas" :key="mahasiswa.id">
-                        <td class="border border-black py-2 px-2">
+                    <tr v-for="(mahasiswa, index) in mahasiswas" :key="mahasiswa._id">
+                        <!-- <td class="border border-black py-2 px-2">
                             <div class="flex justify-center items-center h-full">
                                 <img :src="mahasiswa.imageName" class="rounded-full object-contain h-20 w-20 block"
                                     id="foto" alt="foto" />
                             </div>
-                        </td>
-                        <td class="border border-black py-2 px-2 text-center">{{ mahasiswa.nim }}</td>
-                        <td class="border border-black py-2 px-2 text-left">{{ mahasiswa.nama }}</td>
+                        </td> -->
+                        <td class="border border-black py-2 px-2 text-center">{{ mahasiswa.NIM }}</td>
+                        <td class="border border-black py-2 px-2 text-left">{{ mahasiswa.Nama }}</td>
                         <td class="border border-black py-2 px-2 text-left">{{ mahasiswa.email }}</td>
                         <td class="border border-black py-2 px-2 text-left">{{ mahasiswa.alamat }}</td>
                         <td class="border border-black py-2 px-2 text-center">
                             <div class="flex justify-center space-x-2">
                                 <Button label="" class="bg-yellow-500 text-white" icon="pi pi-user-edit"
-                                    @click="editvisible[index] = true" />
-                                <Dialog v-model:visible="editvisible[index]" modal header="Edit Data"
-                                    :style="{ width: '50vw' }">
-                                    <form @submit.prevent="updateData">
-                                        <div class="mb-4">
-                                            <label for="nim" class="block font-semibold mb-2">NIM:</label>
-                                            <InputNumber placeholder="2100000000" v-model="selectedMahasiswa.nim"
-                                                inputId="withoutgrouping" :useGrouping="false" class="w-full" id="nim" />
-                                        </div>
-
-                                        <div class="mb-4">
-                                            <label for="nama" class="block font-semibold mb-2">Nama:</label>
-                                            <InputText id="nama" v-model="selectedMahasiswa.nama" class="w-full" />
-                                        </div>
-
-                                        <div class="mb-4">
-                                            <label for="email" class="block font-semibold mb-2">Email:</label>
-                                            <InputText placeholder="example@gmail.com" id="email"
-                                                v-model="selectedMahasiswa.email" class="w-full" />
-                                        </div>
-
-                                        <div class="mb-4">
-                                            <label for="alamat" class="block font-semibold mb-2">Alamat:</label>
-                                            <InputText id="alamat" v-model="selectedMahasiswa.alamat" class="w-full" />
-                                        </div>
-
-                                        <div class="text-center">
-                                            <Button label="Update" type="submit"
-                                                class="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 rounded select-none"
-                                                severity="success" />
-                                        </div>
-                                    </form>
-                                </Dialog>
+                                    @click="showEditDialog(index)" />
                                 <Button label="" @click="showDeleteConfirmation(index)" class="bg-red-500 text-white"
                                     icon="pi pi-user-minus" severity="danger" />
                             </div>
@@ -71,6 +39,34 @@
                     </tr>
                 </tbody>
             </table>
+            <Dialog v-model:visible="editingDialogVisible" modal header="Edit Data" :style="{ width: '50vw' }">
+                <form @submit.prevent="updateData">
+                    <div class="mb-4">
+                        <label for="nim" class="block font-semibold mb-2">NIM:</label>
+                        <InputNumber placeholder="2100000000" v-model="selectedMahasiswa.NIM" inputId="withoutgrouping"
+                            :useGrouping="false" class="w-full" id="nim" />
+                    </div>
+                    <div class="mb-4">
+                        <label for="nama" class="block font-semibold mb-2">Nama:</label>
+                        <InputText id="nama" v-model="selectedMahasiswa.Nama" class="w-full" />
+                    </div>
+                    <div class="mb-4">
+                        <label for="email" class="block font-semibold mb-2">Email:</label>
+                        <InputText placeholder="example@gmail.com" id="email" v-model="selectedMahasiswa.email"
+                            class="w-full" />
+                    </div>
+                    <div class="mb-4">
+                        <label for="alamat" class="block font-semibold mb-2">Alamat:</label>
+                        <InputText id="alamat" v-model="selectedMahasiswa.alamat" class="w-full" />
+                    </div>
+                    <div class="text-center">
+                        <Button label="Update" type="submit"
+                            class="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 rounded select-none"
+                            severity="success" />
+                    </div>
+                </form>
+            </Dialog>
+
             <Dialog v-model:visible="visible" modal header="Hapus Data" :style="{ width: '400px' }">
                 <p>Are you sure you want to delete this data?</p>
                 <div class="flex justify-end space-x-4 pt-6">
@@ -78,7 +74,7 @@
                     <Button label="Delete" class="p-button-danger" @click="deletePost" />
                 </div>
             </Dialog>
-            <Toast></Toast>
+
         </div>
     </div>
 </template>
@@ -86,7 +82,6 @@
 <script>
 import axios from 'axios';
 import uploadProfile from '../components/uploadProfile.vue';
-
 import Button from 'primevue/button';
 import { useToast } from 'primevue/usetoast';
 import Dialog from 'primevue/dialog';
@@ -106,80 +101,131 @@ export default {
             email: '',
             alamat: '',
             mahasiswas: [],
-            editvisible: [],
+
             visible: false,
+            editingDialogVisible: false,
+            deleteDialogVisible: false,
             deletingIndex: null,
-            imageName: null,
+            editingIndex: null,
+
             selectedMahasiswa: {
-                nim: null,
-                nama: '',
+                _id: '',
+                NIM: null,
+                Nama: '',
                 email: '',
                 alamat: '',
-            }
+            },
         };
     },
 
     setup() {
         const toast = useToast();
+        const success = (Message, summary) => {
+            toast.add({ severity: 'success', summary: summary, detail: Message, life: 5000 });
+        };
+
+        const warn = (Message, summary) => {
+            toast.add({ severity: 'warn', summary: summary, detail: Message, life: 5000 });
+        };
+
+        const error = (Message, summary) => {
+            toast.add({ severity: 'error', summary: summary, detail: Message, life: 5000 });
+        };
+
         return {
-            toast,
+            success,
+            warn,
+            error,
+
         };
     },
+
     mounted() {
         this.fetchData();
     },
+
     methods: {
-        async deletePost() {
-            try {
-                const nim = this.mahasiswas[this.deletingIndex].nim;
-                const apiEndpoint = `http://localhost:3000/api/products/${nim}`;
-                await axios.delete(apiEndpoint);
-                this.mahasiswas.splice(this.deletingIndex, 1);
-                this.toast.add({
-                    severity: 'success',
-                    summary: 'Success Message',
-                    detail: 'Data Berhasil Dihapus',
-                    life: 3000,
-                });
-            } catch (error) {
-                console.log(error);
-            } finally {
-                this.visible = false;
-                this.deletingIndex = null;
-            }
-        },
         handleDataUpdate() {
             this.fetchData();
         },
 
-
         fetchData() {
-            axios
-                .get('http://localhost:3000/api/products')
+            const token = localStorage.getItem('token');
+
+            // Include the token in the Authorization header
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            };
+
+            axios.get('http://localhost:3008/mahasiswa', config)
                 .then((response) => {
                     this.mahasiswas = response.data;
-                    this.mahasiswas.forEach((mahasiswa) => {
-                        mahasiswa.imageName = 'http://localhost:3000/Images/Profiles/' + mahasiswa.imagePath;
-                    });
                 })
                 .catch((error) => {
                     console.log(error);
                 });
         },
+
         showDeleteConfirmation(index) {
             this.deletingIndex = index;
             this.visible = true;
         },
+        async deletePost() {
+            try {
+                const token = localStorage.getItem('token');
+
+                // Include the token in the Authorization header
+                const config = {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                };
+
+                const id = this.mahasiswas[this.deletingIndex]._id;
+                const apiEndpoint = `http://localhost:3008/mahasiswa/${id}`;
+                await axios.delete(apiEndpoint, config);
+                this.mahasiswas.splice(this.deletingIndex, 1);
+                this.success('Data berhasil dihapus', 'Success Message');
+            } catch (error) {
+                console.log(error);
+                this.error('Data gagal dihapus', 'Error Message');
+            } finally {
+                this.visible = false;
+                this.deletingIndex = null;
+            }
+        },
+
         showEditDialog(index) {
             this.selectedMahasiswa = { ...this.mahasiswas[index] };
-            this.editvisible[index] = true;
+            this.editingIndex = index;
+            this.editingDialogVisible = true;
         },
-        
-        updateData() {
-            
-            this.$emit('update-data');
-            this.showToast('success', 'Success Message', 'Data Berhasil Diperbarui');
+
+
+        async updateData() {
+            try {
+                const token = localStorage.getItem('token');
+                const config = {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                };
+                const id = this.mahasiswas[this.editingIndex]._id;
+                const apiEndpoint = `http://localhost:3008/mahasiswa/${id}`;
+                await axios.put(apiEndpoint, this.selectedMahasiswa, config);
+                this.mahasiswas[this.editingIndex] = { ...this.selectedMahasiswa };
+                this.success('Data berhasil diupdate', 'Success Message');
+            } catch (error) {
+                console.log(error);
+                this.error('Data gagal diupdate', 'Error Message');
+            } 
         },
+
+
+
+
     },
 };
 </script>

@@ -57,11 +57,11 @@ export default {
 
     setup() {
         const toast = useToast();
-        const success = (Message) => {
-            toast.add({ severity: 'success', summary: 'Success Message', detail: Message, life: 5000 });
+        const success = (Message, summary) => {
+            toast.add({ severity: 'success', summary: summary, detail: Message, life: 5000 });
         };
-        const failed = (Message) => {
-            toast.add({ severity: 'error', summary: 'Login Failed', detail: Message, life: 5000 });
+        const failed = (Message, summary) => {
+            toast.add({ severity: 'error', summary: summary, detail: Message, life: 5000 });
         };
 
         return {
@@ -78,15 +78,15 @@ export default {
             // Write if statement to check if the registration data is valid
             // If the data is invalid, show a toast message and return early
             if (this.registrationData.fullname == '' || this.registrationData.email == '' || this.registrationData.username == '' || this.registrationData.password == '') {
-                this.failed('Mohon isi semua data');
+                this.failed('Mohon isi semua data', "Registrasi Gagal");
                 return;
             }
             if (!this.registrationData.email.includes('@') || !this.registrationData.email.includes('.')) {
-                this.failed('Email tidak valid');
+                this.failed('Email tidak valid', "Registrasi Gagal");
                 return;
             }
             if (this.registrationData.password.length < 8) {
-                this.failed('Password harus lebih dari 8 karakter');
+                this.failed('Password harus lebih dari 8 karakter', "Registrasi Gagal");
                 return;
             }
             // if (!this.registrationData.password.match(/[0-9]/g)) {
@@ -104,11 +104,11 @@ export default {
             axios.post('http://localhost:3008/register', this.registrationData)
                 .then(response => {
                     // Handle the successful registration response
-                    this.success(response.data.message);
+                    this.success(response.data.message, "Registrasi Berhasil");
                 })
                 .catch(error => {
                     // Handle the registration error
-                    this.failed(error.response.data.message);
+                    this.failed(error.response.data.message, "Registrasi Gagal");
                 });
         },
     },
