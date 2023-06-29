@@ -285,8 +285,6 @@ export default {
             }
         },
 
-
-
         showDeleteConfirmation(index) {
             this.deletingIndex = index;
             this.visible2 = true;
@@ -346,9 +344,6 @@ export default {
                 this.editingDialogVisible = false;
             }
         },
-
-
-
 
     },
 
