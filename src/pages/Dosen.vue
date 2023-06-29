@@ -62,9 +62,9 @@
                         <td class="border border-black py-2 px-2">
                             <div class="flex justify-center space-x-2">
                                 <Button label="" class="bg-yellow-500 text-white" icon="pi pi-user-edit"
-                                    @click="showEditDialog(index)" />
+                                    @click="showEditDialog(index)" text raised outlined/>
                                 <Button label="" @click="showDeleteConfirmation(index)" class="bg-red-500 text-white"
-                                    icon="pi pi-user-minus" severity="danger" />
+                                    icon="pi pi-user-minus" severity="danger" text raised outlined/>
                             </div>
                         </td>
                     </tr>
