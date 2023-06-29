@@ -197,8 +197,8 @@ export default {
                 this.mahasiswas.splice(this.deletingIndex, 1);
                 this.success('Data berhasil dihapus', 'Success Message');
             } catch (error) {
-                console.log(error);
-                this.error('Data gagal dihapus', 'Error Message');
+                const errorMessage = error.response.data.message;
+                this.error(errorMessage);
             } finally {
                 this.visible = false;
                 this.deletingIndex = null;
@@ -218,12 +218,12 @@ export default {
         },
 
         async updateData() {
-            if (!this.NIM || !this.Nama || !this.email || !this.alamat) {
+            if (!this.selectedMahasiswa.NIM || !this.selectedMahasiswa.Nama || !this.selectedMahasiswa.email || !this.selectedMahasiswa.alamat) {
                 this.warn('Data tidak boleh kosong', 'Alert Message');
                 return;
             }
 
-            if (!this.validateEmail(this.email)) {
+            if (!this.validateEmail(this.selectedMahasiswa.email)) {
                 this.warn('Email tidak valid', 'Alert Message');
                 return;
             }
@@ -241,8 +241,9 @@ export default {
                 this.editingDialogVisible = false;
                 this.success('Data berhasil diupdate', 'Success Message');
             } catch (error) {
-                console.log(error);
-                this.error('Data gagal diupdate', 'Error Message');
+                const errorMessage = error.response.data.message;
+                this.error("Data Gagal Diubah : "+ errorMessage, 'Error Message');
+                this.editingDialogVisible = false;
             }
         },
 

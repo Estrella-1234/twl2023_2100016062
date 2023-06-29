@@ -244,46 +244,47 @@ export default {
             this.posts.sort((a, b) => a.NIY - b.NIY);
         },
 
-        submitForm() {
-            // Retrieve the token from localStorage
-            const token = localStorage.getItem('token');
+        async submitForm() {
+            try {
+                // Retrieve the token from localStorage
+                const token = localStorage.getItem('token');
 
-            // Include the token in the Authorization header
-            const config = {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            };
+                // Include the token in the Authorization header
+                const config = {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                };
 
-            // Check if all fields are filled
-            if (!this.newPost.NIY || !this.newPost.nama || !this.newPost.alamat || !this.newPost.jabatan) {
-                this.warn('Data tidak boleh kosong', 'Alert Message');
-                return;
+                // Check if all fields are filled
+                if (!this.newPost.NIY || !this.newPost.nama || !this.newPost.alamat || !this.newPost.jabatan) {
+                    this.warn('Data tidak boleh kosong', 'Alert Message');
+                    return;
+                }
+
+                // Send a POST request to add the new post to the server
+                const response = await axios.post('http://localhost:3008/dosen', this.newPost, config);
+                this.posts.push(response.data);
+
+                // Clear the form fields
+                this.newPost.nama = '';
+                this.newPost.NIY = null;
+                this.newPost.alamat = '';
+                this.newPost.jabatan = '';
+
+                this.success('Data berhasil ditambahkan', 'Success Message');
+
+                // Close the dialog
+                this.visible = false;
+
+                // Refresh fetch posts
+                this.fetchPosts();
+            } catch (error) {
+                const errorMessage = error.response.data.message;
+                this.error("Data Gagal Ditambahkan: " + errorMessage, 'Error Message');
             }
-
-
-            // Send a POST request to add the new post to the server
-            axios
-                .post('http://localhost:3008/dosen', this.newPost, config)
-                .then((response) => {
-                    this.posts.push(response.data);
-                    // Clear the form fields
-                    this.newPost.nama = '';
-                    this.newPost.NIY = null;
-                    this.newPost.alamat = '';
-                    this.newPost.jabatan = '';
-
-                    this.success('Data berhasil ditambahkan', 'Success Message');
-                    // Close the dialog
-                    this.visible = false;
-                    // Refresh fetch posts
-                    this.fetchPosts();
-                })
-                .catch((error) => {
-                    console.log(error);
-                    this.error('Data gagal ditambahkan ' + error.data.Message, 'Error Message');
-                });
         },
+
 
 
         showDeleteConfirmation(index) {
@@ -340,8 +341,8 @@ export default {
                 this.success('Data berhasil diupdate', 'Success Message');
                 this.editingDialogVisible = false;
             } catch (error) {
-                console.log(error);
-                this.error('Data gagal diupdate', 'Error Message');
+                const errorMessage = error.response.data.message;
+                this.error("Data Gagal Diubah : " + errorMessage, 'Error Message');
                 this.editingDialogVisible = false;
             }
         },

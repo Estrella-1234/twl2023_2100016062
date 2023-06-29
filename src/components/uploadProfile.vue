@@ -150,14 +150,12 @@ export default {
                         this.success(response.data.Message, 'Success Message');
                         this.handleDialogClose();
                         window.location.reload();
-                    })
-                    .catch(error => {
-                        this.error(error.response.data.Message, 'Error Message');
                     });
 
 
             } catch (error) {
-                console.log(error);
+                const errorMessage = error.response.data.message;
+                this.error("Data Gagal Ditambahkan : "+errorMessage, 'Error Message');
             }
         },
 

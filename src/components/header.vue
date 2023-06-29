@@ -52,6 +52,7 @@ import Dialog from 'primevue/dialog';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 import axios from 'axios';
+import { useToast } from 'primevue/usetoast';
 
 export default {
   created() {
@@ -60,6 +61,26 @@ export default {
     }).catch(error => {
       console.error(error);
     });
+  },
+
+  setup() {
+    const toast = useToast();
+    const success = (Message, summary) => {
+            toast.add({ severity: 'success', summary: summary, detail: Message, life: 5000 });
+        };
+
+        const warn = (Message, summary) => {
+            toast.add({ severity: 'warn', summary: summary, detail: Message, life: 5000 });
+        };
+
+        const error = (Message, summary) => {
+            toast.add({ severity: 'error', summary: summary, detail: Message, life: 5000 });
+        };
+    return { 
+      success, 
+      warn, 
+      error 
+    };
   },
 
   components: {
@@ -122,7 +143,7 @@ export default {
       const token = localStorage.getItem('token');
 
       if (!token) {
-        console.error('Token not found');
+        this.error('You are not logged in', 'Error');
         return '';
       }
 
@@ -137,7 +158,7 @@ export default {
         const data = response.data;
         return data.username;
       } catch (error) {
-        console.error('Error fetching user data:', error);
+        this.error(error.data.message, 'Error');
         return '';
       }
     },
@@ -175,39 +196,41 @@ export default {
           this.profileDialogVisible = true; // Open the dialog after fetching the data
         })
         .catch((error) => {
-          console.error('Error fetching user data:', error);
+          this.error(error.data.message, 'Error');
         });
     },
 
-    saveProfile() {
-      // Send the updated user profile to the API for saving
-      const id = this.getUserIdFromToken();
-      const updatedProfile = {
-        username: this.userProfile.username,
-        fullname: this.userProfile.name,
-        email: this.userProfile.email,
-      };
+    async saveProfile() {
+      try {
+        // Send the updated user profile to the API for saving
+        const id = this.getUserIdFromToken();
+        const updatedProfile = {
+          username: this.userProfile.username,
+          fullname: this.userProfile.name,
+          email: this.userProfile.email,
+        };
 
-      const token = localStorage.getItem('token');
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-      axios.put(`http://localhost:3008/user/${id}`, updatedProfile, config)
-        .then((response) => {
-          // Handle the response or show a success message
-          console.log('User profile saved successfully:', response.data);
+        const token = localStorage.getItem('token');
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
 
-          // update username
-          this.username = this.userProfile.username;
+        const response = await axios.put(`http://localhost:3008/user/${id}`, updatedProfile, config);
 
-          this.profileDialogVisible = false;
-        })
-        .catch((error) => {
-          console.error('Error saving user profile:', error);
-        });
+        // Handle the response or show a success message
+        this.success(response.data.message, 'Success');
+
+        // Update username
+        this.username = this.userProfile.username;
+
+        this.profileDialogVisible = false;
+      } catch (error) {
+        this.error(error.response.data.message, 'Error');
+      }
     },
+
 
     cancelProfile() {
       // Reset the user profile data
