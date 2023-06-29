@@ -29,7 +29,6 @@
             </div>
         </form>
     </div>
-
 </template>
 
 
@@ -55,7 +54,7 @@ export default {
             toast.add({ severity: 'error', summary: 'Login Failed', detail: Message, life: 5000 });
         };
 
-        return { 
+        return {
             success,
             failed
         };
@@ -69,10 +68,6 @@ export default {
                     password: this.password,
                 });
 
-                // Handle the response based on your application's logic
-                //Add Toast
-                this.success();
-
                 // Save the token to localStorage
                 const token = response.data.token;
                 localStorage.setItem('token', token);
@@ -81,6 +76,8 @@ export default {
                 this.username = '';
                 this.password = '';
 
+                // Refresh the page
+                window.location.reload();
 
 
             } catch (error) {
@@ -93,13 +90,12 @@ export default {
         switchToRegistration() {
             this.$emit('switch-mode', 'registration');
         },
-        
+
     },
 };
 
 </script>
-  
+
 <style>
 /* No custom styles needed for this component */
 </style>
-  

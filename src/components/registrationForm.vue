@@ -98,13 +98,11 @@ export default {
             //     return;
             // }
 
-
-
-
             axios.post('http://localhost:3008/register', this.registrationData)
                 .then(response => {
                     // Handle the successful registration response
                     this.success(response.data.message, "Registrasi Berhasil");
+                    this.switchToLogin();
                 })
                 .catch(error => {
                     // Handle the registration error

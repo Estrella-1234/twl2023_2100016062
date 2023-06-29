@@ -2,7 +2,7 @@
     <div class="justify-content-center text-left pl-8 pb-3">
 
         <div class="pt-3">
-            <Button @click="visible = true" label="Tambah Data" class="text-center" icon="pi pi-user-plus"
+            <Button label="Tambah Data" class="text-center" icon="pi pi-user-plus" @click="visible = true"
                 severity="success" />
         </div>
         <Dialog v-model:visible="visible" @close="handleDialogClose" modal header="Upload Data" :style="{ width: '50vw' }">

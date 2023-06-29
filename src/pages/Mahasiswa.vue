@@ -9,7 +9,7 @@
                 <thead>
                     <tr class="bg-slate-600 text-white m-5">
                         <!-- <th class="border border-black w-1/6 pt-2 pb-2">Foto</th> -->
-                        <th class="border border-black w-1/8">NIM</th>
+                        <th class="border border-black w-1/8  pt-2 pb-2">NIM</th>
                         <th class="border border-black w-1/2">Nama</th>
                         <th class="border border-black w-1/6">Email</th>
                         <th class="border border-black w-1/2">Alamat</th>
