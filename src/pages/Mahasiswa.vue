@@ -33,7 +33,7 @@
                                 <Button label="" class="bg-yellow-500 text-white" icon="pi pi-user-edit"
                                     @click="showEditDialog(index)" />
                                 <Button label="" @click="showDeleteConfirmation(index)" class="bg-red-500 text-white"
-                                    icon="pi pi-user-minus" severity="danger" />
+                                    icon="pi pi-user-minus" severity="danger" text outlined/>
                             </div>
                         </td>
                     </tr>
@@ -162,16 +162,22 @@ export default {
             axios.get('http://localhost:3008/mahasiswa', config)
                 .then((response) => {
                     this.mahasiswas = response.data;
+                    this.sortPostsByNIM(); // Sort the posts array by NIY
                 })
                 .catch((error) => {
                     console.log(error);
                 });
         },
 
+        sortPostsByNIM() {
+            this.mahasiswas.sort((a, b) => a.NIM - b.NIM);
+        },
+
         showDeleteConfirmation(index) {
             this.deletingIndex = index;
             this.visible = true;
         },
+
         async deletePost() {
             try {
                 const token = localStorage.getItem('token');
@@ -216,11 +222,12 @@ export default {
                 const apiEndpoint = `http://localhost:3008/mahasiswa/${id}`;
                 await axios.put(apiEndpoint, this.selectedMahasiswa, config);
                 this.mahasiswas[this.editingIndex] = { ...this.selectedMahasiswa };
+                this.editingDialogVisible = false;
                 this.success('Data berhasil diupdate', 'Success Message');
             } catch (error) {
                 console.log(error);
                 this.error('Data gagal diupdate', 'Error Message');
-            } 
+            }
         },
 
 

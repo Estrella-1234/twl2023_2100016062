@@ -6,7 +6,7 @@
                 severity="success" />
         </div>
         <Dialog v-model:visible="visible" @close="handleDialogClose" modal header="Upload Data" :style="{ width: '50vw' }">
-            <form @submit.prevent="uploadFile">
+            <form @submit="uploadFile">
                 <div class="mb-4">
                     <label for="NIM" class="block font-semibold mb-2">NIM:</label>
                     <!-- <input type="text" id="NIM" v-model="NIM" /> -->
@@ -129,8 +129,6 @@ export default {
                 return;
             }
 
-
-
             try {
                 // Retrieve the token from localStorage
                 const token = localStorage.getItem('token');
@@ -145,13 +143,13 @@ export default {
                 const { NIM, Nama, email, alamat } = this;
                 const data = { NIM, Nama, email, alamat };
 
-                console.log(data); // menampilkan data produk di console
 
                 await axios.post('http://localhost:3008/mahasiswa', data, config)
                     .then(response => {
                         this.response = response;
                         this.success('Data berhasil ditambahkan', 'Success Message');
                         this.handleDialogClose();
+                        // this.fetchData();
                     })
                     .catch(error => {
                         console.log(error);
@@ -164,8 +162,7 @@ export default {
             }
         },
 
-        async fetchData() {
-            // Retrieve the token from localStorage
+        fetchData() {
             const token = localStorage.getItem('token');
 
             // Include the token in the Authorization header
@@ -174,17 +171,20 @@ export default {
                     Authorization: `Bearer ${token}`,
                 },
             };
-            try {
-                const response = await axios.get('http://localhost:3008/mahasiswa', config);
-                this.mahasiswas = response.data;
-                console.log(this.mahasiswas);
 
-
-            } catch (error) {
-                console.log(error);
-            }
+            axios.get('http://localhost:3008/mahasiswa', config)
+                .then((response) => {
+                    this.mahasiswas = response.data;
+                    this.sortPostsByNIM(); // Sort the posts array by NIY
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
         },
 
+        sortPostsByNIM() {
+            this.mahasiswas.sort((a, b) => a.NIM - b.NIM);
+        },
     }
 
 }

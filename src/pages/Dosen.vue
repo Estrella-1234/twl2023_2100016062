@@ -54,66 +54,58 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(post,index) in posts" :key="post.NIY">
+                    <tr v-for="(post, index) in posts" :key="post.NIY">
                         <td class="border border-black py-2 px-2 text-center">{{ post.NIY }} </td>
                         <td class="border border-black py-2 px-2 text-left">{{ post.nama }}</td>
                         <td class="border border-black py-2 px-2 text-left">{{ post.alamat }}</td>
                         <td class="border border-black py-2 px-2 text-left">{{ post.jabatan }}</td>
                         <td class="border border-black py-2 px-2">
-
-                            <!-- Edit Data -->
                             <div class="flex justify-center space-x-2">
-                                <Button class="mr-10" icon="pi pi-user-edit" severity="success" text raised
-                                    aria-label="Edit" @click="editvisible[index] = true" />
-                                <Dialog v-model:visible="editvisible[index]" modal header="Edit Data Mahasiswa"
-                                    :style="{ width: '50vw' }">
-                                    <div>
-                                        <form @submit.prevent="updatePost()">
-                                            <div class="mb-4">
-                                                <label for="Nama" class="block font-semibold mb-2">Nama: </label>
-                                                <InputText id="Nama" v-model="selectedPost.nama" class="w-full" />
-                                            </div>
-                                            <div class="mb-4">
-                                                <label for="NIY" class="block font-semibold mb-2">NIY:</label>
-                                                <InputNumber v-model="selectedPost.NIY" inputId="withoutgrouping"
-                                                    :useGrouping="false" class="w-full" id="NIY" />
-                                            </div>
-                                            <div class="mb-4">
-                                                <label for="Alamat" class="block font-semibold mb-2">Alamat:</label>
-                                                <InputText id="Alamat" v-model="selectedPost.alamat" class="w-full" />
-                                            </div>
-                                            <div class="mb-4">
-                                                <label for="Jabatan" class="block font-semibold mb-2">Jabatan:</label>
-                                                <InputText id="Jabatan" v-model="selectedPost.jabatan" class="w-full" />
-                                            </div>
-                                            <div class="text-center">
-                                                <Button label="Update" type="submit"
-                                                    class="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 rounded" />
-                                            </div>
-                                        </form>
-                                    </div>
-                                </Dialog>
-
-                                <!-- Delete Data -->
-                                <Button icon="pi pi-trash" severity="danger" text raised aria-label="Delete"
-                                    @click="confirm2(post)" />
-                                <Dialog v-model:visible="visible2" modal header="Hapus Data" :style="{ width: '400px' }">
-                                    <p>Are you sure you want to delete this data?</p>
-                                    <div class="flex justify-end space-x-4 pt-6 ">
-                                        <Button label="Cancel" class="p-button-text" @click="visible2 = false" />
-                                        <Button label="Delete" class="p-button-danger" @click="deletePost" />
-                                    </div>
-
-                                </Dialog>
+                                <Button label="" class="bg-yellow-500 text-white" icon="pi pi-user-edit"
+                                    @click="showEditDialog(index)" />
+                                <Button label="" @click="showDeleteConfirmation(index)" class="bg-red-500 text-white"
+                                    icon="pi pi-user-minus" severity="danger" />
                             </div>
-
                         </td>
                     </tr>
                 </tbody>
-
             </table>
-        </div>
+            <Dialog v-model:visible="editingDialogVisible" modal header="Edit Data" :style="{ width: '50vw' }">
+                <div>
+                    <form @submit.prevent="updateData">
+                        <div class="mb-4">
+                            <label for="NIY" class="block font-semibold mb-2">NIY:</label>
+                            <InputNumber v-model="selectedPost.NIY" inputId="withoutgrouping" :useGrouping="false"
+                                class="w-full" id="NIY" />
+                        </div>
+                        <div class="mb-4">
+                            <label for="Nama" class="block font-semibold mb-2">Nama: </label>
+                            <InputText id="Nama" v-model="selectedPost.nama" class="w-full" />
+                        </div>
+                        <div class="mb-4">
+                            <label for="Alamat" class="block font-semibold mb-2">Alamat:</label>
+                            <InputText id="Alamat" v-model="selectedPost.alamat" class="w-full" />
+                        </div>
+                        <div class="mb-4">
+                            <label for="Jabatan" class="block font-semibold mb-2">Jabatan:</label>
+                            <InputText id="Jabatan" v-model="selectedPost.jabatan" class="w-full" />
+                        </div>
+                        <div class="text-center">
+                            <Button label="Update" type="submit"
+                                class="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 rounded" />
+                        </div>
+                    </form>
+                </div>
+            </Dialog>
 
+            <Dialog v-model:visible="visible2" modal header="Hapus Data" :style="{ width: '400px' }">
+                <p>Are you sure you want to delete this data?</p>
+                <div class="flex justify-end space-x-4 pt-6 ">
+                    <Button label="Cancel" class="p-button-text" @click="visible2 = false" />
+                    <Button label="Delete" class="p-button-danger" @click="deletePost()" />
+                </div>
+            </Dialog>
+        </div>
     </div>
 </template>
 
@@ -194,10 +186,8 @@ export default {
 
     data() {
         return {
-            editvisible: [],
-            visible2: false,
+
             posts: [],
-            showForm: false,
             id: '',
             nama: '',
             NIY: null,
@@ -209,7 +199,13 @@ export default {
                 alamat: "",
                 jabatan: "",
             },
+            visible2: false,
             selectedPost: null,
+            editingDialogVisible: false,
+            deleteDialogVisible: false,
+            deletingIndex: null,
+            editingIndex: null,
+
         }
     },
 
@@ -230,16 +226,14 @@ export default {
                 .get('http://localhost:3008/dosen', config)
                 .then((response) => {
                     this.posts = response.data;
+                    this.sortPostsByNIY(); // Sort the posts array by NIY
                 })
                 .catch((error) => {
                     console.log(error);
                 });
         },
-
-        validateEmail(email) {
-            // Regular expression to validate email format
-            const re = /\S+@\S+\.\S+/;
-            return re.test(email);
+        sortPostsByNIY() {
+            this.posts.sort((a, b) => a.NIY - b.NIY);
         },
 
         submitForm() {
@@ -254,15 +248,11 @@ export default {
             };
 
             // Check if all fields are filled
-            if (!this.NIM || !this.Nama || !this.email || !this.alamat) {
+            if (!this.newPost.NIY || !this.newPost.nama || !this.newPost.alamat || !this.newPost.jabatan) {
                 this.warn('Data tidak boleh kosong', 'Alert Message');
                 return;
             }
 
-            if (!this.validateEmail(this.email)) {
-                this.warn('Email tidak valid', 'Alert Message');
-                return;
-            }
 
             // Send a POST request to add the new post to the server
             axios
@@ -283,87 +273,67 @@ export default {
                 })
                 .catch((error) => {
                     console.log(error);
-                    this.error('Data gagal ditambahkan '+ error.data.Message, 'Error Message');
+                    this.error('Data gagal ditambahkan ' + error.data.Message, 'Error Message');
                 });
         },
-
 
 
         showDeleteConfirmation(index) {
             this.deletingIndex = index;
-            this.visible = true;
-        },
-        showEditDialog(index) {
-            this.selectedMahasiswa = { ...this.mahasiswas[index] };
-            this.editvisible[index] = true;
-        },
-
-        updatePost() {
-            // Retrieve the token from localStorage
-            const token = localStorage.getItem('token');
-
-            // Include the token in the Authorization header
-            const config = {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            };
-
-            axios
-                .put(`http://localhost:3008/dosen/${this.selectedPost._id}`, this.selectedPost, config)
-                .then((response) => {
-                    const updatedPost = response.data;
-                    const index = this.posts.findIndex(post => post.id === updatedPost.id);
-
-                    this.posts.splice(index, 1, updatedPost);
-                    this.visible1 = false;
-                    this.change();
-
-                    this.success('Data berhasil diubah', 'Success Message');
-                    // Refresh fetch posts
-                    this.fetchPosts();
-                })
-                .catch((error) => {
-                    console.log(error);
-                    this.error('Data gagal diubah '+ error.data.Message, 'Error Message');
-                });
-        },
-
-        deletePost(post) {
-            const index = this.posts.indexOf(post);
-            this.posts.splice(index, 1);
-            this.deleteConfirmed()
-            this.visible2 = false;
-        },
-
-        confirm2(post) {
             this.visible2 = true;
-            this.selectedPost = post;
-
         },
 
-        deleteConfirmed() {
-            // Retrieve the token from localStorage
-            const token = localStorage.getItem('token');
+        async deletePost() {
+            try {
+                const token = localStorage.getItem('token');
+                const config = {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                };
 
-            // Include the token in the Authorization header
-            const config = {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            };
-            axios.delete(`http://localhost:3008/dosen/${this.selectedPost._id}`, config)
-                .then(() => {
-                    console.log('Post deleted successfully!');
-                    this.success('Data berhasil dihapus', 'Success Message');
-                    // Refresh fetch posts
-                    this.fetchPosts();
-                })
-                .catch((error) => {
-                    console.log(error);
-                    this.error('Data gagal dihapus '+ error.data.Message, 'Error Message');
-                });
+                const id = this.posts[this.deletingIndex]._id;
+                const apiEndpoint = `http://localhost:3008/dosen/${id}`;
+                await axios.delete(apiEndpoint, config);
+                this.posts.splice(this.deletingIndex, 1);
+                this.success('Data berhasil dihapus', 'Success Message');
+            } catch (error) {
+                console.log(error);
+                this.error('Data gagal dihapus', 'Error Message');
+            } finally {
+                this.visible2 = false;
+                this.deletingIndex = null;
+            }
         },
+
+        showEditDialog(index) {
+            this.selectedPost = { ...this.posts[index] };
+            this.editingIndex = index;
+            this.editingDialogVisible = true;
+        },
+
+        async updateData() {
+            try {
+                const token = localStorage.getItem('token');
+                const config = {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                };
+                const id = this.posts[this.editingIndex]._id;
+                const apiEndpoint = `http://localhost:3008/dosen/${id}`;
+                await axios.put(apiEndpoint, this.selectedPost, config);
+                this.posts[this.editingIndex] = { ...this.selectedPost };
+                this.success('Data berhasil diupdate', 'Success Message');
+                this.editingDialogVisible = false;
+            } catch (error) {
+                console.log(error);
+                this.error('Data gagal diupdate', 'Error Message');
+                this.editingDialogVisible = false;
+            }
+        },
+
+
 
 
     },
