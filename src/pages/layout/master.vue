@@ -13,9 +13,9 @@
   <div v-else>
     <Toast></Toast>
     <div class="flex justify-center items-center min-h-screen bg">
-      <div class="bg-white p-8 rounded shadow-lg">
+      <div class="bg-white p-8 rounded shadow-lg login-section">
         <template v-if="mode === 'login'">
-          <LoginForm @switch-mode="switchMode"/>
+          <LoginForm @switch-mode="switchMode" />
         </template>
         <template v-else-if="mode === 'registration'">
           <RegistrationForm @switch-mode="switchMode" />
@@ -72,5 +72,8 @@ export default {
   background-image: url('../../assets/Login.jpg');
   background-size: cover;
   background-position: center;
+}
+.login-section {
+  width: 320px;
 }
 </style>
