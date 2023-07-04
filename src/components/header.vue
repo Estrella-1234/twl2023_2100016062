@@ -14,7 +14,7 @@
         </span>
       </div>
       <div class="flex space-x-3 items-center justify-center px-3 pr-5">
-        <div class="text-md">{{ usern ame }}</div>
+        <div class="text-md">{{ username }}</div>
         <Avatar icon="pi pi-prime" class="mr-2" style="background-color:#9c27b0; color: #ffffff" shape="circle"
           @click="toggle" aria-haspopup="true" aria-controls="overlay_menu" />
 
