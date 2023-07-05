@@ -156,7 +156,7 @@ export default {
       try {
         const response = await axios.get(`http://localhost:3008/user/${id}`, config);
         const data = response.data;
-        return data.username;
+        return data.fullname;
       } catch (error) {
         this.error(error.data.message, 'Error');
         return '';
