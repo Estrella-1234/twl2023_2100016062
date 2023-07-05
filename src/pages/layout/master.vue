@@ -4,7 +4,7 @@
       <sidebar :dataOpenSideBar="openSidebar" />
       <div class="w-full h-full">
         <headerTop :dataOpenSideBar="openSidebar" :clickHambuger="toggleSidebar" />
-        <div class="w-full h-[calc(100vh-50px)] overflow-auto bg">
+        <div class="w-full h-[calc(100vh-50px)] overflow-auto bg1">
           <router-view></router-view>
         </div>
       </div>
@@ -70,6 +70,11 @@ export default {
 <style scoped>
 .bg {
   background-image: url('../../assets/Login.jpg');
+  background-size: cover;
+  background-position: center;
+}
+.bg1 {
+  background-image: url('../../assets/bg1.jpg');
   background-size: cover;
   background-position: center;
 }
