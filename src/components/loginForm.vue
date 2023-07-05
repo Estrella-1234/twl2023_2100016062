@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h2 class="text-2xl font-semibold text-center mb-6">Log In</h2>
+        <h2 class="text-2xl font-semibold text-center mb-6">Sign In</h2>
         <form @submit.prevent="loginUser">
             <div class="mb-4">
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="username">Username</label>
