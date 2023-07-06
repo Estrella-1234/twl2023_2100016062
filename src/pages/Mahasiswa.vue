@@ -45,7 +45,7 @@
                         <div class="mb-4">
                             <label for="nim" class="block font-semibold mb-2">NIM:</label>
                             <InputNumber placeholder="2100000000" v-model="selectedMahasiswa.NIM" inputId="withoutgrouping"
-                                :useGrouping="false" class="w-full" id="nim" />
+                                :useGrouping="false" disabled class="w-full" id="nim" />
                         </div>
                         <div class="mb-4">
                             <label for="nama" class="block font-semibold mb-2">Nama:</label>

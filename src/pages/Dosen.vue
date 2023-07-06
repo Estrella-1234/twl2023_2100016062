@@ -77,7 +77,7 @@
                         <form @submit.prevent="updateData">
                             <div class="mb-4">
                                 <label for="NIY" class="block font-semibold mb-2">NIY:</label>
-                                <InputNumber v-model="selectedPost.NIY" inputId="withoutgrouping" :useGrouping="false"
+                                <InputNumber v-model="selectedPost.NIY" disabled inputId="withoutgrouping" :useGrouping="false"
                                     class="w-full" id="NIY" />
                             </div>
                             <div class="mb-4">
