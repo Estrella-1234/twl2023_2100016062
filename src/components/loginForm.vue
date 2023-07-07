@@ -31,6 +31,7 @@
 
 <script>
 import axios from 'axios';
+import jwtDecode from 'jwt-decode';
 import { useToast } from "primevue/usetoast";
 
 export default {
@@ -68,6 +69,13 @@ export default {
                 // Save the token to localStorage
                 const token = response.data.token;
                 localStorage.setItem('token', token);
+
+                // Extract the expiration date from the token
+                const decodedToken = jwtDecode(token);
+                const expirationDate = new Date(decodedToken.exp * 1000); // Convert seconds to milliseconds
+
+                // Save the expiration date to localStorage
+                localStorage.setItem('expirationDate', expirationDate.toISOString());
 
                 // Reset the form fields
                 this.username = '';
