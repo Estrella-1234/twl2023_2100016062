@@ -26,7 +26,7 @@
       <div class="p-4 bg-white rounded-lg shadow-md">
         <div class="mb-4">
           <label for="username" class="block font-semibold mb-2">Username</label>
-          <InputText id="username" v-model="userProfile.username" class="w-full" />
+          <InputText id="username" disabled v-model="userProfile.username" class="w-full" />
         </div>
         <div class="mb-4">
           <label for="name" class="block font-semibold mb-2">Full Name</label>
