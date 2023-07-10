@@ -3,7 +3,7 @@
 
         <div class="pt-3">
             <Button label="Tambah Data" class="text-center" icon="pi pi-user-plus" @click="visible = true"
-                severity="success"/>
+                severity="success" />
         </div>
         <Dialog v-model:visible="visible" @close="handleDialogClose" modal header="Upload Data" :style="{ width: '50vw' }">
             <form @submit.prevent="uploadFile">
@@ -135,8 +135,19 @@ export default {
                 return;
             }
 
+            const fileInput = this.$refs.fileInput;
+            const file = fileInput.files[0];
+            const formData = new FormData();
+            formData.append('image', file);
 
             try {
+                const response = await axios.post('http://localhost:3008/upload', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
+                // Retrieve the file name from the response
+                const fileName = response.data.fileName;
                 // Retrieve the token from localStorage
                 const token = localStorage.getItem('token');
 
@@ -147,22 +158,30 @@ export default {
                     },
                 };
 
+                // Include imageName and imagePath in the data object
                 const { NIM, Nama, email, alamat } = this;
-                const data = { NIM, Nama, email, alamat };
+                const data = {
+                    NIM,
+                    Nama,
+                    email,
+                    alamat,
+                    imageName: fileName, // Add the fileName property
+                };
 
 
                 await axios.post('http://localhost:3008/mahasiswa', data, config)
                     .then(response => {
                         this.response = response;
-                        this.success(response.data.Message, 'Success Message');
+                        this.$emit('update-data');
                         this.handleDialogClose();
-                        window.location.reload();
+                        // window.location.reload();
+                        this.success("Data Berhasil Disimpan", 'Success Message');
                     });
 
 
             } catch (error) {
                 const errorMessage = error.response.data.message;
-                this.error("Data Gagal Ditambahkan : "+errorMessage, 'Error Message');
+                this.error("Data Gagal Ditambahkan : " + errorMessage, 'Error Message');
             }
         },
 

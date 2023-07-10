@@ -1,43 +1,56 @@
 <template>
     <div>
-        <input type="file" @change="handleFileUpload" accept="image/*">
-        <button @click="uploadImage">Upload</button>
+        <div v-if="a">
+            <div>
+                <label for="image" class="block font-semibold mb-2">File:</label>
+                <input type="file" id="image" ref="fileInput" />
+                <button @click="uploadImage">Upload</button>
+            </div>
+        </div>
+        <div v-else>
+            <comingSoon></comingSoon>
+        </div>
     </div>
 </template>
   
 <script>
+import comingSoon from '@/components/comingSoon.vue';
 import axios from 'axios';
 
 export default {
+    components: {
+        comingSoon,
+    },
     data() {
         return {
-            selectedFile: null
+            a: false,
         }
     },
     methods: {
         handleFileUpload(event) {
             this.selectedFile = event.target.files[0];
         },
-        uploadImage() {
+        async uploadImage() {
+            const fileInput = this.$refs.fileInput;
+            const file = fileInput.files[0];
             const formData = new FormData();
-            formData.append('image', this.selectedFile);
-            const config = {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            };
+            formData.append('image', file);
 
-            axios.post('http://localhost:3008/upload', formData, config)
-                .then(response => {
-                    console.log(response.data);
-                    // Handle the response as needed
-                })
-                .catch(error => {
-                    console.error(error);
-                    // Handle the error as needed
+            try {
+                const response = await axios.post('http://localhost:3008/upload', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
                 });
+                const fileName = response.data.fileName; // Retrieve the file name from the response
+                const filePath = response.data.filePath; // Retrieve the file path from the response
+                console.log('File uploaded:', fileName, filePath);
+
+            } catch (error) {
+                console.error(error);
+            }
         }
     }
 }
+
 </script>
-  

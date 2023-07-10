@@ -223,7 +223,7 @@ export default {
         this.success(response.data.message, 'Success');
 
         // Update username
-        this.username = this.userProfile.username;
+        this.username = this.userProfile.name;
 
         this.profileDialogVisible = false;
       } catch (error) {

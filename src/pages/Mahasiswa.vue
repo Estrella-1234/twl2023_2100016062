@@ -2,14 +2,14 @@
     <div>
         <h3 class="font-serif font-semibold text-3xl pt-5">Data Mahasiswa</h3>
         <div class="">
-            <uploadProfile @update-data="handleDataUpdate"></uploadProfile>
+            <uploadProfile v-on:update-data="handleDataUpdate"></uploadProfile>
         </div>
         <div class="pl-8 pr-8">
             <div class="overflow-x-auto">
                 <table class="border border-collapse border-black table-auto bg-white">
                     <thead>
                         <tr class="bg-slate-600 text-white m-5">
-                            <!-- <th class="border border-black w-1/6 pt-2 pb-2">Foto</th> -->
+                            <th class="border border-black w-1/6 pt-2 pb-2">Foto</th>
                             <th class="border border-black w-1/8  pt-2 pb-2">NIM</th>
                             <th class="border border-black w-1/2">Nama</th>
                             <th class="border border-black w-1/6">Email</th>
@@ -19,12 +19,12 @@
                     </thead>
                     <tbody>
                         <tr v-for="(mahasiswa, index) in mahasiswas" :key="mahasiswa._id">
-                            <!-- <td class="border border-black py-2 px-2">
-                            <div class="flex justify-center items-center h-full">
-                                <img :src="mahasiswa.imageName" class="rounded-full object-contain h-20 w-20 block"
-                                    id="foto" alt="foto" />
-                            </div>
-                        </td> -->
+                            <td class="border border-black py-2 px-2">
+                                <div class="flex justify-center items-center h-full">
+                                    <img :src="getImageUrl(mahasiswa.imageName)"
+                                        class="rounded-full object-contain h-20 w-20 block" id="foto" alt="foto" />
+                                </div>
+                            </td>
                             <td class="border border-black py-2 px-2 text-center">{{ mahasiswa.NIM }}</td>
                             <td class="border border-black py-2 px-2 text-left">{{ mahasiswa.Nama }}</td>
                             <td class="border border-black py-2 px-2 text-left">{{ mahasiswa.email }}</td>
@@ -59,6 +59,10 @@
                         <div class="mb-4">
                             <label for="alamat" class="block font-semibold mb-2">Alamat:</label>
                             <InputText id="alamat" v-model="selectedMahasiswa.alamat" class="w-full" />
+                        </div>
+                        <div class="mb-4">
+                            <label for="image" class="block font-semibold mb-2">Foto:</label>
+                            <input type="file" id="image" ref="fileInput" />
                         </div>
                         <div class="text-center">
                             <Button label="Update" type="submit"
@@ -227,28 +231,51 @@ export default {
                 this.warn('Email tidak valid', 'Alert Message');
                 return;
             }
+
             try {
                 const token = localStorage.getItem('token');
                 const config = {
                     headers: {
                         Authorization: `Bearer ${token}`,
+                        'Content-Type': 'multipart/form-data' // Add this line to specify the content type
                     },
                 };
+
                 const id = this.mahasiswas[this.editingIndex]._id;
                 const apiEndpoint = `http://localhost:3008/mahasiswa/${id}`;
-                await axios.put(apiEndpoint, this.selectedMahasiswa, config);
-                this.mahasiswas[this.editingIndex] = { ...this.selectedMahasiswa };
+
+                const formData = new FormData(); // Create a new FormData object
+                formData.append('image', this.$refs.fileInput.files[0]); // Append the selected file to the FormData
+
+                // Upload the image file first
+                const response = await axios.post('http://localhost:3008/upload', formData, config);
+                const fileName = response.data.fileName;
+
+                // Update the data including the new image name
+                const updatedData = {
+                    ...this.selectedMahasiswa,
+                    imageName: fileName
+                };
+
+                // Update the mahasiswa data
+                await axios.put(apiEndpoint, updatedData, config);
+
+                // Update the mahasiswas array in the Vue component
+                this.mahasiswas[this.editingIndex] = { ...updatedData };
+
                 this.editingDialogVisible = false;
                 this.success('Data berhasil diupdate', 'Success Message');
             } catch (error) {
                 const errorMessage = error.response.data.message;
-                this.error("Data Gagal Diubah : "+ errorMessage, 'Error Message');
+                this.error('Data Gagal Diubah: ' + errorMessage, 'Error Message');
                 this.editingDialogVisible = false;
             }
         },
 
 
-
+        getImageUrl(imageName) {
+            return imageName ? `http://localhost:3008/uploads/${imageName}` : null;
+        },
 
     },
 };
