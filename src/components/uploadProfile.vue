@@ -3,7 +3,7 @@
 
         <div class="pt-3">
             <Button label="Tambah Data" class="text-center" icon="pi pi-user-plus" @click="visible = true"
-                severity="success" />
+                severity="success"/>
         </div>
         <Dialog v-model:visible="visible" @close="handleDialogClose" modal header="Upload Data" :style="{ width: '50vw' }">
             <form @submit.prevent="uploadFile">
@@ -32,10 +32,10 @@
                     <InputText id="alamat" v-model="alamat" class="w-full" />
                 </div>
 
-                <!-- <div class="mb-4">
-                    <label for="image" class="block font-semibold mb-2">File:</label>
+                <div class="mb-4">
+                    <label for="image" class="block font-semibold mb-2">Foto:</label>
                     <input type="file" id="image" ref="fileInput" />
-                </div> -->
+                </div>
                 <div class="text-center">
                     <Button label="Submit" type="submit"
                         class="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 rounded select-none "
@@ -108,6 +108,7 @@ export default {
     methods: {
         // method / function untuk menutup dan mengupdate data
         handleDialogClose() {
+            this.fetchData(); // Refresh the data
             this.visible = false; // Close the dialog
         },
 
@@ -128,6 +129,12 @@ export default {
                 this.warn('Email tidak valid', 'Alert Message');
                 return;
             }
+
+            if (!this.$refs.fileInput.files[0]) {
+                this.warn('File tidak boleh kosong', 'Alert Message');
+                return;
+            }
+
 
             try {
                 // Retrieve the token from localStorage
