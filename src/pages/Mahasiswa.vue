@@ -62,7 +62,7 @@
                         </div>
                         <div class="mb-4">
                             <label for="image" class="block font-semibold mb-2">Foto:</label>
-                            <input type="file" id="image" ref="fileInput" />
+                            <input type="file" name="image" ref="fileInput" />
                         </div>
                         <div class="text-center">
                             <Button label="Update" type="submit"
@@ -222,55 +222,68 @@ export default {
         },
 
         async updateData() {
-            if (!this.selectedMahasiswa.NIM || !this.selectedMahasiswa.Nama || !this.selectedMahasiswa.email || !this.selectedMahasiswa.alamat) {
-                this.warn('Data tidak boleh kosong', 'Alert Message');
+            if (
+                !this.selectedMahasiswa.NIM ||
+                !this.selectedMahasiswa.Nama ||
+                !this.selectedMahasiswa.email ||
+                !this.selectedMahasiswa.alamat
+            ) {
+                this.warn("Data tidak boleh kosong", "Alert Message");
                 return;
             }
 
             if (!this.validateEmail(this.selectedMahasiswa.email)) {
-                this.warn('Email tidak valid', 'Alert Message');
+                this.warn("Email tidak valid", "Alert Message");
                 return;
             }
 
             try {
-                const token = localStorage.getItem('token');
+                const token = localStorage.getItem("token");
                 const config = {
                     headers: {
                         Authorization: `Bearer ${token}`,
-                        'Content-Type': 'multipart/form-data' // Add this line to specify the content type
+                        "Content-Type": "multipart/form-data", // Set the content type to multipart/form-data
                     },
                 };
 
                 const id = this.mahasiswas[this.editingIndex]._id;
                 const apiEndpoint = `http://localhost:3008/mahasiswa/${id}`;
 
-                const formData = new FormData(); // Create a new FormData object
-                formData.append('image', this.$refs.fileInput.files[0]); // Append the selected file to the FormData
+                const formData = new FormData();
+                if (this.$refs.fileInput.files.length > 0) {
+                    formData.append("image", this.$refs.fileInput.files[0]);
+                }
+                formData.append("Nama", this.selectedMahasiswa.Nama);
+                formData.append("email", this.selectedMahasiswa.email);
+                formData.append("alamat", this.selectedMahasiswa.alamat);
 
-                // Upload the image file first
-                const response = await axios.post('http://localhost:3008/upload', formData, config);
-                const fileName = response.data.fileName;
+                const response = await axios.post("http://localhost:3008/upload", formData, config);
+                const newImageName = response.data.fileName;
 
-                // Update the data including the new image name
                 const updatedData = {
-                    ...this.selectedMahasiswa,
-                    imageName: fileName
+                    Nama: this.selectedMahasiswa.Nama,
+                    email: this.selectedMahasiswa.email,
+                    alamat: this.selectedMahasiswa.alamat,
+                    imageName: newImageName,
                 };
 
-                // Update the mahasiswa data
-                await axios.put(apiEndpoint, updatedData, config);
-
-                // Update the mahasiswas array in the Vue component
-                this.mahasiswas[this.editingIndex] = { ...updatedData };
+                const config1 = {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                };
+                await axios.put(apiEndpoint, updatedData, config1);
+                this.fetchData();
 
                 this.editingDialogVisible = false;
-                this.success('Data berhasil diupdate', 'Success Message');
+                this.success("Data berhasil diupdate", "Success Message");
             } catch (error) {
                 const errorMessage = error.response.data.message;
-                this.error('Data Gagal Diubah: ' + errorMessage, 'Error Message');
+                this.error("Data Gagal Diubah: " + errorMessage, "Error Message");
                 this.editingDialogVisible = false;
             }
         },
+
 
 
         getImageUrl(imageName) {
