@@ -5,14 +5,17 @@
             <div class="mb-4">
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="username">Username</label>
                 <input v-model="username"
-                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    class="appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     id="username" type="text" placeholder="Enter your username" />
             </div>
             <div class="mb-6">
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="password">Password</label>
+                <Password placeholder="Enter your password" v-model="password" class="rounded text-gray-700 text-sm font-bold mb-2" 
+                    :feedback="false" toggleMask ></Password>
+<!-- 
                 <input v-model="password"
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="password" type="password" placeholder="Enter your password" />
+                    id="password" type="password" placeholder="Enter your password" /> -->
             </div>
             <div class="pb-3">
                 <button
@@ -33,8 +36,12 @@
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
 import { useToast } from "primevue/usetoast";
+import Password from 'primevue/password';
 
 export default {
+    components: {
+        Password
+    },
     name: 'LoginForm',
     data() {
         return {

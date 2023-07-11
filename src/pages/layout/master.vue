@@ -108,6 +108,6 @@ export default {
 }
 
 .login-section {
-  width: 320px;
+  width: 345px;
 }
 </style>
