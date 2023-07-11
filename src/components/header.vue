@@ -21,6 +21,7 @@
         <Menu id="overlay_menu" ref="menu" :model="items" :popup="true" />
       </div>
     </div>
+
     <!-- Profile Dialog -->
     <Dialog v-model:visible="profileDialogVisible" modal header="User Profile" :style="{ width: '30vw' }">
       <div class="p-4 bg-white rounded-lg shadow-md">
@@ -41,7 +42,30 @@
           <Button label="Save" severity="success" @click="saveProfile" />
           <Button label="Cancel" @click="cancelProfile" />
         </div>
+      </div>
+    </Dialog>
 
+    <!-- Change Password Dialog -->
+    <Dialog v-model:visible="changePasswordDialogVisible" modal header="Change Password" :style="{ width: '30vw' }">
+      <div class="p-4 bg-white rounded-lg shadow-md">
+        <!-- Add form fields for current password, new password, and confirm password -->
+        <div class="mb-4">
+          <label for="currentPassword" class="block font-semibold mb-2">Current Password</label>
+          <InputText id="currentPassword" type="password" v-model="currentPassword" class="w-full" />
+        </div>
+        <div class="mb-4">
+          <label for="newPassword" class="block font-semibold mb-2">New Password</label>
+          <InputText id="newPassword" type="password" v-model="newPassword" class="w-full" />
+        </div>
+        <div class="mb-4">
+          <label for="confirmPassword" class="block font-semibold mb-2">Confirm Password</label>
+          <InputText id="confirmPassword" type="password" v-model="confirmPassword" class="w-full" />
+        </div>
+
+        <div class="flex justify-center mt-4 space-x-6">
+          <Button label="Save" severity="success" @click="savePassword" />
+          <Button label="Cancel" @click="cancelPassword" />
+        </div>
       </div>
     </Dialog>
   </div>
@@ -66,20 +90,20 @@ export default {
   setup() {
     const toast = useToast();
     const success = (Message, summary) => {
-            toast.add({ severity: 'success', summary: summary, detail: Message, life: 5000 });
-        };
+      toast.add({ severity: 'success', summary: summary, detail: Message, life: 5000 });
+    };
 
-        const warn = (Message, summary) => {
-            toast.add({ severity: 'warn', summary: summary, detail: Message, life: 5000 });
-        };
+    const warn = (Message, summary) => {
+      toast.add({ severity: 'warn', summary: summary, detail: Message, life: 5000 });
+    };
 
-        const error = (Message, summary) => {
-            toast.add({ severity: 'error', summary: summary, detail: Message, life: 5000 });
-        };
-    return { 
-      success, 
-      warn, 
-      error 
+    const error = (Message, summary) => {
+      toast.add({ severity: 'error', summary: summary, detail: Message, life: 5000 });
+    };
+    return {
+      success,
+      warn,
+      error
     };
   },
 
@@ -113,15 +137,20 @@ export default {
         {
           label: 'Change Password',
           icon: 'pi pi-lock',
+          command: this.showChangePasswordDialog,
         },
       ],
       profileDialogVisible: false,
+      changePasswordDialogVisible: false,
       userProfile: {
         name: '',
         email: '',
         username: '', // Add username property
       },
       username: '', // Menambahkan properti username
+      currentPassword: '',
+      newPassword: '',
+      confirmPassword: '',
     };
   },
 
@@ -241,6 +270,60 @@ export default {
       // Close the profile dialog
       this.profileDialogVisible = false;
     },
+
+    cancelPassword() {
+      // Reset the password fields
+      this.currentPassword = '';
+      this.newPassword = '';
+      this.confirmPassword = '';
+
+      // Close the change password dialog
+      this.changePasswordDialogVisible = false;
+    },
+
+    async savePassword() {
+      // Validate the password fields
+      if (this.newPassword !== this.confirmPassword) {
+        this.error('Password tidak sesuai', 'Error');
+        return;
+      }
+
+      try {
+        // Send the updated password to the API for saving
+        const id = this.getUserIdFromToken();
+        const updatedPassword = {
+          currentPassword: this.currentPassword,
+          newPassword: this.newPassword,
+        };
+
+        const token = localStorage.getItem('token');
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+
+        const response = await axios.put(`http://localhost:3008/user/${id}/password`, updatedPassword, config);
+
+        // Handle the response or show a success message
+        this.success(response.data.message, 'Success');
+
+        // Reset the password fields
+        this.currentPassword = '';
+        this.newPassword = '';
+        this.confirmPassword = '';
+
+        this.changePasswordDialogVisible = false;
+      } catch (error) {
+        this.error(error.response.data.message, 'Error');
+      }
+    },
+
+    showChangePasswordDialog() {
+      this.changePasswordDialogVisible = true;
+    },
+
+
   },
 };
 </script>

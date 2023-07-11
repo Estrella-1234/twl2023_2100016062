@@ -48,7 +48,6 @@ export default {
   setup() {
     const hasToken = localStorage.getItem('token')
 
-
     return {
       hasToken,
     }
