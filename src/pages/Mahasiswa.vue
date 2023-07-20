@@ -161,7 +161,7 @@ export default {
                 },
             };
 
-            axios.get('http://localhost:3008/mahasiswa', config)
+            axios.get('https://twl-final-backend.vercel.app/mahasiswa', config)
                 .then((response) => {
                     this.mahasiswas = response.data;
                     this.sortPostsByNIM(); // Sort the posts array by NIY
@@ -192,7 +192,7 @@ export default {
                 };
 
                 const id = this.mahasiswas[this.deletingIndex]._id;
-                const apiEndpoint = `http://localhost:3008/mahasiswa/${id}`;
+                const apiEndpoint = `https://twl-final-backend.vercel.app/mahasiswa/${id}`;
                 await axios.delete(apiEndpoint, config);
                 this.mahasiswas.splice(this.deletingIndex, 1);
                 this.success('Data berhasil dihapus', 'Success Message');
@@ -235,7 +235,7 @@ export default {
                     },
                 };
                 const id = this.mahasiswas[this.editingIndex]._id;
-                const apiEndpoint = `http://localhost:3008/mahasiswa/${id}`;
+                const apiEndpoint = `https://twl-final-backend.vercel.app/mahasiswa/${id}`;
                 await axios.put(apiEndpoint, this.selectedMahasiswa, config);
                 this.mahasiswas[this.editingIndex] = { ...this.selectedMahasiswa };
                 this.editingDialogVisible = false;

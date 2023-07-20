@@ -31,11 +31,11 @@
                     <!-- <input type="text" id="alamat" v-model="alamat" /> -->
                     <InputText id="alamat" v-model="alamat" class="w-full" />
                 </div>
-
+<!-- 
                 <div class="mb-4">
                     <label for="image" class="block font-semibold mb-2">Foto:</label>
                     <input type="file" id="image" ref="fileInput" />
-                </div>
+                </div> -->
                 <div class="text-center">
                     <Button label="Submit" type="submit"
                         class="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 rounded select-none "
@@ -130,12 +130,6 @@ export default {
                 return;
             }
 
-            if (!this.$refs.fileInput.files[0]) {
-                this.warn('File tidak boleh kosong', 'Alert Message');
-                return;
-            }
-
-
             try {
                 // Retrieve the token from localStorage
                 const token = localStorage.getItem('token');
@@ -151,7 +145,7 @@ export default {
                 const data = { NIM, Nama, email, alamat };
 
 
-                await axios.post('http://localhost:3008/mahasiswa', data, config)
+                await axios.post('https://twl-final-backend.vercel.app/mahasiswa', data, config)
                     .then(response => {
                         this.response = response;
                         this.success(response.data.Message, 'Success Message');
@@ -176,7 +170,7 @@ export default {
                 },
             };
 
-            axios.get('http://localhost:3008/mahasiswa', config)
+            axios.get('https://twl-final-backend.vercel.app/mahasiswa', config)
                 .then((response) => {
                     this.mahasiswas = response.data;
                     this.sortPostsByNIM(); // Sort the posts array by NIY

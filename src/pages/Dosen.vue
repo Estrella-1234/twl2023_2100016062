@@ -231,7 +231,7 @@ export default {
             };
 
             axios
-                .get('http://localhost:3008/dosen', config)
+                .get('https://twl-final-backend.vercel.app/dosen', config)
                 .then((response) => {
                     this.posts = response.data;
                     this.sortPostsByNIY(); // Sort the posts array by NIY
@@ -263,7 +263,7 @@ export default {
                 }
 
                 // Send a POST request to add the new post to the server
-                const response = await axios.post('http://localhost:3008/dosen', this.newPost, config);
+                const response = await axios.post('https://twl-final-backend.vercel.app/dosen', this.newPost, config);
                 this.posts.push(response.data);
 
                 // Clear the form fields
@@ -300,7 +300,7 @@ export default {
                 };
 
                 const id = this.posts[this.deletingIndex]._id;
-                const apiEndpoint = `http://localhost:3008/dosen/${id}`;
+                const apiEndpoint = `https://twl-final-backend.vercel.app/dosen/${id}`;
                 await axios.delete(apiEndpoint, config);
                 this.posts.splice(this.deletingIndex, 1);
                 this.success('Data berhasil dihapus', 'Success Message');
@@ -333,7 +333,7 @@ export default {
                     return;
                 }
                 const id = this.posts[this.editingIndex]._id;
-                const apiEndpoint = `http://localhost:3008/dosen/${id}`;
+                const apiEndpoint = `https://twl-final-backend.vercel.app/dosen/${id}`;
                 await axios.put(apiEndpoint, this.selectedPost, config);
                 this.posts[this.editingIndex] = { ...this.selectedPost };
                 this.success('Data berhasil diupdate', 'Success Message');

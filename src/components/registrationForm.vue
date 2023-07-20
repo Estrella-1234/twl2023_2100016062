@@ -98,7 +98,7 @@ export default {
             //     return;
             // }
 
-            axios.post('http://localhost:3008/register', this.registrationData)
+            axios.post('https://twl-final-backend.vercel.app/register', this.registrationData)
                 .then(response => {
                     // Handle the successful registration response
                     this.success(response.data.message, "Registrasi Berhasil");

@@ -154,7 +154,7 @@ export default {
       };
 
       try {
-        const response = await axios.get(`http://localhost:3008/user/${id}`, config);
+        const response = await axios.get(`https://twl-final-backend.vercel.app/user/${id}`, config);
         const data = response.data;
         return data.fullname;
       } catch (error) {
@@ -187,7 +187,7 @@ export default {
         },
       };
       axios
-        .get(`http://localhost:3008/user/${id}`, config)
+        .get(`https://twl-final-backend.vercel.app/user/${id}`, config)
         .then((response) => {
           const data = response.data;
           this.userProfile.name = data.fullname;
@@ -217,7 +217,7 @@ export default {
           },
         };
 
-        const response = await axios.put(`http://localhost:3008/user/${id}`, updatedProfile, config);
+        const response = await axios.put(`https://twl-final-backend.vercel.app/user/${id}`, updatedProfile, config);
 
         // Handle the response or show a success message
         this.success(response.data.message, 'Success');
